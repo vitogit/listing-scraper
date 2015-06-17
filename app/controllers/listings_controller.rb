@@ -4,7 +4,26 @@ class ListingsController < ApplicationController
   # GET /listings
   # GET /listings.json
   def index
-    @listings = Listing.all
+    agent = Mechanize.new
+    @listings = []
+    page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/pocitos!punta-carretas/1-dormitorio')
+    raw_listings = agent.page.search("#grillaavisos a")
+    raw_listings.each do |raw_listing|
+      listing = Listing.new
+      listing.id = 0
+      listing.title = raw_listing.at('.thumb_titulo').text
+      # listing.price = raw_listing.search('.thumb01_precio')[0].text
+      # listing.gc = raw_listing.search('.thumb01_precio')[0].text
+      # listing.address = raw_listing.at('.thumb_address').text
+      listing.phone = raw_listing.at('.thumb_telefono').text
+      listing.link = raw_listing.attributes['href']
+      @listings << listing
+    end
+
+    # page = link.click
+
+    # @page_uri = page.uri
+    # @listings = Listing.all
   end
 
   # GET /listings/1
