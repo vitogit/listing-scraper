@@ -39,6 +39,8 @@ GEM
     arel (6.0.0)
     binding_of_caller (0.7.3.pre1)
       debug_inspector (>= 0.0.1)
+    bootstrap-generators (3.3.4)
+      railties (>= 3.1.0)
     builder (3.2.2)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
@@ -151,6 +153,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootstrap-generators (= 3.3.4)
   jbuilder (= 2.2.3)
   jquery-rails (= 4.0.3)
   mechanize (= 2.7.3)

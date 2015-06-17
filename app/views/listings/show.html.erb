@@ -1,0 +1,32 @@
+<div class="page-header">
+  <%= link_to listings_path, class: 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Back
+  <% end %>
+  <%= link_to edit_listing_path(@listing), class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+    Edit
+  <% end %>
+  <h1>Show listing</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Title:</dt>
+  <dd><%= @listing.title %></dd>
+
+  <dt>Price:</dt>
+  <dd><%= @listing.price %></dd>
+
+  <dt>Gc:</dt>
+  <dd><%= @listing.gc %></dd>
+
+  <dt>Address:</dt>
+  <dd><%= @listing.address %></dd>
+
+  <dt>Phone:</dt>
+  <dd><%= @listing.phone %></dd>
+
+  <dt>Link:</dt>
+  <dd><%= @listing.link %></dd>
+
+</dl>

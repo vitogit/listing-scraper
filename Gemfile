@@ -7,6 +7,8 @@ gem 'turbolinks',           '2.3.0'
 gem 'jbuilder',             '2.2.3'
 gem 'nokogiri', '1.6.3.1'
 gem 'mechanize', '2.7.3'
+gem 'bootstrap-generators', '3.3.4'
+
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
   gem 'web-console', '2.0.0.beta3'
