@@ -11,6 +11,7 @@
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
+            <th>Img</th>
             <th>Title</th>
             <th>Price</th>
             <th>Gc</th>
@@ -25,8 +26,9 @@
 
     <tbody>
       <%= content_tag_for(:tr, @listings) do |listing| %>
+            <td><%= image_tag listing.img %></td>
             <td><%= listing.title %></td>
-            <td><%= listing.price %></td>
+            <td><%= listing.currency %> <%= listing.price %></td>
             <td><%= listing.gc %></td>
             <td><%= listing.address %></td>
             <td><%= listing.phone %></td>

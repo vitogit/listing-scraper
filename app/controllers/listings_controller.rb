@@ -12,9 +12,11 @@ class ListingsController < ApplicationController
       listing = Listing.new
       listing.id = 0
       listing.title = raw_listing.at('.thumb_titulo').text
-      # listing.price = raw_listing.search('.thumb01_precio')[0].text
+      listing.img = raw_listing.at('#div_rodea_datos img').attributes['data-original']
+      listing.price = raw_listing.at('.thumb01_precio').text.gsub(/\D/, '') if raw_listing.at('.thumb01_precio')
+      listing.currency = raw_listing.at('.thumb01_precio').text.gsub(/\d/, '') if raw_listing.at('.thumb01_precio')
       # listing.gc = raw_listing.search('.thumb01_precio')[0].text
-      # listing.address = raw_listing.at('.thumb_address').text
+      listing.address = raw_listing.at('.thumb_txt h2').text
       listing.phone = raw_listing.at('.thumb_telefono').text
       listing.link = raw_listing.attributes['href']
       @listings << listing
