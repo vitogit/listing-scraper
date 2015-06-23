@@ -3,7 +3,7 @@
     <span class="glyphicon glyphicon-plus"></span>
     New Listing
   <% end %>
-  <h1>Listing listings</h1>
+  <h1>Listings</h1>
 </div>
 
 <h2> <%= @page_uri %> </h2>
@@ -17,6 +17,7 @@
             <th>Gc</th>
             <th>Address</th>
             <th>Phone</th>
+            <th>External Id</th>
             <th>Link</th>
             <th></th>
         <th></th>
@@ -32,10 +33,11 @@
             <td><%= listing.gc %></td>
             <td><%= listing.address %></td>
             <td><%= listing.phone %></td>
-            <td><%= listing.link %></td>
+            <td><%= listing.external_id %></td>
+            <td><%= link_to :link, listing.link %></td>
             <td><%= link_to 'Show', listing %></td>
-        <td><%= link_to 'Edit', edit_listing_path(listing) %></td>
-        <td><%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to 'Edit', edit_listing_path(listing) %></td>
+            <td><%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       <% end %>
     </tbody>
   </table>
