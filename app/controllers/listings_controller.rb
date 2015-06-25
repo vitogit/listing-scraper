@@ -9,6 +9,8 @@ class ListingsController < ApplicationController
     page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/pocitos!punta-carretas/1-dormitorio')
     pages = 0
     max_pages = 1
+    dolar_to_pesos = 26.5
+    max_price = 18000
 
     while  pages < max_pages && page.link_with(text: /Siguiente/)  do
       raw_listings = agent.page.search("#grillaavisos a")
@@ -19,8 +21,12 @@ class ListingsController < ApplicationController
         listing.img = raw_listing.at('#div_rodea_datos img').attributes['data-original']
 
         price_selector = raw_listing.at('.thumb01_precio, .thumb02_precio')
-        listing.price = price_selector.text.gsub(/\D/, '') if price_selector
         listing.currency = price_selector.text.gsub(/[\d^.]/, '') if price_selector
+        listing.price = price_selector.text.gsub(/\D/, '') if price_selector
+        if listing.currency.strip == "U$S"
+          listing.price = listing.price * dolar_to_pesos
+          listing.currency += "(Converted to $U)"
+        end
 
         # listing.gc = raw_listing.search('.thumb01_precio')[0].text
         listing.address = raw_listing.at('.thumb_txt h2').text
@@ -28,8 +34,9 @@ class ListingsController < ApplicationController
         listing.link = raw_listing.attributes['href']
 
         listing.external_id = listing.link.split('-')[-1]
-        @listings << listing
-
+        if listing.price < max_price
+          @listings << listing
+        end
       end
       next_page = page.link_with(text: /Siguiente/)
       page = next_page.click
