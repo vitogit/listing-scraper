@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :listings
   root 'listings#index'
+  get 'scrape_gallito', to: 'listings#scrape_gallito'
+
 
 
 

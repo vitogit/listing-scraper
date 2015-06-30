@@ -1,3 +1,6 @@
 .container {
   width: 90%;
 }
+.page-header a.new-listing {
+  float:none;
+}

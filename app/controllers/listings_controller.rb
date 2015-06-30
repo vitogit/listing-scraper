@@ -4,6 +4,10 @@ class ListingsController < ApplicationController
   # GET /listings
   # GET /listings.json
   def index
+    @listings = Listing.all.order(:price)
+  end
+
+  def scrape_gallito
     agent = Mechanize.new
     @listings = []
     page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/pocitos!punta-carretas/1-dormitorio')
@@ -46,11 +50,8 @@ class ListingsController < ApplicationController
       page = next_page.click
       pages += 1
     end
-    @listings = Listing.order(:price)
-    # next_page = page.link_with(text: /Siguiente/)
-    # page = next_page.click
-    # @page_uri = page.uri
-    # @listings = Listing.all
+    redirect_to :root, notice: 'Listings scraped.'
+
   end
 
   # GET /listings/1

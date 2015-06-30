@@ -1,12 +1,11 @@
 <div class="page-header">
-  <%= link_to new_listing_path, class: 'btn btn-primary' do %>
+  <h1>Listings</h1> <br>
+  <%= link_to new_listing_path, class: 'btn btn-primary new-listing' do %>
     <span class="glyphicon glyphicon-plus"></span>
     New Listing
   <% end %>
-  <h1>Listings</h1>
 </div>
 
-<h2> <%= @page_uri %> </h2>
 <div class="table-responsive">
   <table class="table table-striped table-bordered table-hover">
     <thead>
