@@ -9,7 +9,16 @@ gem 'nokogiri', '1.6.3.1'
 gem 'mechanize', '2.7.3'
 gem 'bootstrap-generators', '3.3.4'
 
-group :development, :test do
+
+group :development do
+  gem 'sqlite3',     '1.3.9'
+  gem 'web-console', '2.0.0.beta3'
+  gem 'better_errors', '2.1.1'
+  gem "binding_of_caller"
+  
+end
+
+group :test do
   gem 'sqlite3',     '1.3.9'
   gem 'web-console', '2.0.0.beta3'
 end

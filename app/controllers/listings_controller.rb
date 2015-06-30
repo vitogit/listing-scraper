@@ -15,8 +15,14 @@ class ListingsController < ApplicationController
     while  pages < max_pages && page.link_with(text: /Siguiente/)  do
       raw_listings = agent.page.search("#grillaavisos a")
       raw_listings.each do |raw_listing|
+
         listing = Listing.new
-        listing.id = 0
+
+        listing.link = raw_listing.attributes['href']
+        listing.external_id = listing.link.split('-')[-1]
+        next if Listing.find_by_external_id(listing.external_id).present?
+
+        # listing.id = 0
         listing.title = raw_listing.at('.thumb_titulo').text
         listing.img = raw_listing.at('#div_rodea_datos img').attributes['data-original']
 
@@ -31,18 +37,16 @@ class ListingsController < ApplicationController
         # listing.gc = raw_listing.search('.thumb01_precio')[0].text
         listing.address = raw_listing.at('.thumb_txt h2').text
         listing.phone = raw_listing.at('.thumb_telefono').text.gsub(/\s+/, "")
-        listing.link = raw_listing.attributes['href']
 
-        listing.external_id = listing.link.split('-')[-1]
         if listing.price < max_price
-          @listings << listing
+          listing.save
         end
       end
       next_page = page.link_with(text: /Siguiente/)
       page = next_page.click
       pages += 1
-
     end
+    @listings = Listing.order(:price)
     # next_page = page.link_with(text: /Siguiente/)
     # page = next_page.click
     # @page_uri = page.uri
