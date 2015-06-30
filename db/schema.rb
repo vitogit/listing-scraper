@@ -13,8 +13,21 @@
 
 ActiveRecord::Schema.define(version: 20150630135618) do
 
-# Could not dump table "listings" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
+  create_table "listings", force: :cascade do |t|
+    t.string   "title"
+    t.integer  "price"
+    t.integer  "gc"
+    t.string   "address"
+    t.integer  "phone"
+    t.string   "link"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.string   "currency"
+    t.string   "img"
+    t.string   "external_id"
+    t.boolean  "deleted",     default: false
+    t.integer  "ranking"
+  end
 
   create_table "pictures", force: :cascade do |t|
     t.string   "url"

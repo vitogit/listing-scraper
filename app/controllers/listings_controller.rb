@@ -19,8 +19,6 @@ class ListingsController < ApplicationController
         listing = Listing.new
 
         listing.link = raw_listing.attributes['href']
-        puts "listing.link_________"+listing.link.to_json
-        puts "listing.link.split('-')________"+listing.link.split('-').to_json
         listing.external_id = listing.link.split('-')[-1]
         next if Listing.find_by_external_id(listing.external_id).present?
 
