@@ -66,6 +66,11 @@ class ListingsController < ApplicationController
     @listing.description = raw_listing.at('#descripcionLarga').text.squish
     @listing.full_scraped = true
 
+    sup_total = raw_listing.at("#primerosLi li:contains('Sup. Total:')").text
+
+    @listing.description = @listing.description+". "+sup_total
+    puts "@listing.description______"+@listing.description
+
     # save pictures only if there are empty
     if !@listing.pictures.present?
       raw_pictures = raw_listing.search(".sliderImg")

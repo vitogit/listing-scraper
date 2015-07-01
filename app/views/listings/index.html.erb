@@ -18,6 +18,7 @@
         <th>Phone</th>
         <th>Garantia</th>
         <th>Ranking</th>
+        <th>Created</th>
         <th>External Link</th>
 
         <th></th>
@@ -39,6 +40,7 @@
             <td><%= listing.phone %></td>
             <td><%= listing.guarantee %></td>
             <td> <%=listing.ranking  %></td>
+            <td> <%=listing.created_at.strftime("%e/%m/%Y")  %></td>
             <td><%= link_to :ver, listing.link %></td>
 
             <td><%= link_to 'Show', listing %></td>

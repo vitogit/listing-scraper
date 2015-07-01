@@ -4,3 +4,6 @@
 .page-header a.new-listing {
   float:none;
 }
+.page-header{
+  margin:10px 0;
+}
