@@ -1,5 +1,5 @@
 class ListingsController < ApplicationController
-  before_action :set_listing, only: [:show, :edit, :update, :destroy]
+  before_action :set_listing, only: [:show, :edit, :update, :destroy, :scrapeit]
 
   # GET /listings
   # GET /listings.json
@@ -54,6 +54,31 @@ class ListingsController < ApplicationController
 
   end
 
+  def scrapeit
+    agent = Mechanize.new
+    page = agent.get(@listing.link)
+    dolar_to_pesos = 26.5
+    max_price = 18000
+
+    raw_listing = agent.page.search(".contendor")
+
+    @listing.title = raw_listing.at('.titulo').text
+    @listing.description = raw_listing.at('#descripcionLarga').text.squish
+    @listing.full_scraped = true
+
+    # save pictures only if there are empty
+    if !@listing.pictures.present?
+      raw_pictures = raw_listing.search(".sliderImg")
+      puts "raw_pictures______"+raw_pictures.to_json
+
+      @pictures = []
+      raw_pictures.each do |raw_picture|
+        picture = Picture.new
+        picture.url = raw_picture.attributes['href']
+        @listing.pictures << picture
+      end
+    end
+  end
   # GET /listings/1
   # GET /listings/1.json
   def show
@@ -64,8 +89,8 @@ class ListingsController < ApplicationController
     @listing = Listing.new
   end
 
-  # GET /listings/1/edit
   def edit
+    puts "json________"+@listing.pictures.to_json
   end
 
   # POST /listings
@@ -87,15 +112,23 @@ class ListingsController < ApplicationController
   # PATCH/PUT /listings/1
   # PATCH/PUT /listings/1.json
   def update
+    puts "listin params_________"+listing_params.to_json
+    puts "@pictures_________"+@pictures.to_json
     respond_to do |format|
       if @listing.update(listing_params)
-        format.html { redirect_to @listing, notice: 'Listing was successfully updated.' }
+        format.html { redirect_to edit_listing_path(@listing.id), notice: 'Listing was successfully updated.' }
         format.json { render :show, status: :ok, location: @listing }
       else
         format.html { render :edit }
         format.json { render json: @listing.errors, status: :unprocessable_entity }
       end
     end
+
+    # if @client.update(client_params)
+    #   redirect_to admin_clients_path
+    # else
+    #   render :edit
+    # end
   end
 
   # DELETE /listings/1
@@ -116,6 +149,7 @@ class ListingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def listing_params
-      params.require(:listing).permit(:title, :price, :gc, :address, :phone, :link)
+      params.require(:listing).permit(:full_scraped, :title, :price, :gc, :address, :phone, :link, :description,:guarantee, :ranking,
+                                      pictures_attributes: [:url])
     end
 end

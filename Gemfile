@@ -8,6 +8,8 @@ gem 'jbuilder',             '2.2.3'
 gem 'nokogiri', '1.6.3.1'
 gem 'mechanize', '2.7.3'
 gem 'bootstrap-generators', '3.3.4'
+gem 'sanitize', '4.0.0'
+gem 'nested_form_fields'
 
 
 group :development do
@@ -15,7 +17,7 @@ group :development do
   gem 'web-console', '2.0.0.beta3'
   gem 'better_errors', '2.1.1'
   gem "binding_of_caller"
-  
+
 end
 
 group :test do

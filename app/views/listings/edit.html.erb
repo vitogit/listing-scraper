@@ -1,4 +1,5 @@
 <div class="page-header">
+
   <%= link_to listings_path, class: 'btn btn-default' do %>
     <span class="glyphicon glyphicon-list-alt"></span>
     Back
@@ -7,6 +8,21 @@
     <span class="glyphicon glyphicon-info-sign"></span>
     Show
   <% end %>
+
+  <% if @listing.full_scraped? %>
+    <%= link_to scrapeit_listing_path, class: 'btn btn-success' , remote:true do %>
+      <span class="glyphicon glyphicon glyphicon-ok"></span>
+      Scrape it again
+    <% end %>
+  <% else %>
+    <%= link_to scrapeit_listing_path, class: 'btn btn-warning' , remote:true do %>
+      <span class="glyphicon glyphicon glyphicon-exclamation-sign"></span>
+      Scrape it
+    <% end %>
+  <% end %>
+
+
+
   <h1>Editing listing</h1>
 </div>
 
