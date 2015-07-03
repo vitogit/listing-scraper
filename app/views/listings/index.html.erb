@@ -7,22 +7,22 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table table-striped table-bordered table-hover">
+  <table class="table table-striped table-bordered table-hover datatable">
     <thead>
       <tr>
-        <th>Img</th>
+        <th></th>
         <th>Title</th>
+        <th>Barrio</th>
         <th>Price</th>
         <th>Gc</th>
-        <th>Address</th>
-        <th>Phone</th>
+        <th>Description</th>
+        <!-- <th>Phone</th> -->
         <th>Garantia</th>
         <th>Ranking</th>
         <th>Created</th>
-        <th>External Link</th>
-
-        <th></th>
-        <th></th>
+        <th>External</th>
+        <!-- <th></th> -->
+        <!-- <th></th> -->
       </tr>
     </thead>
 
@@ -34,17 +34,18 @@
               <% end %>
             </td>
             <td><%= listing.title %></td>
+            <td><%= listing.zone %></td>
             <td><%= listing.currency %> <%= listing.price %></td>
             <td><%= listing.gc %></td>
-            <td><%= listing.address %></td>
-            <td><%= listing.phone %></td>
+            <td><%= listing.description %></td>
+            <!-- <td><%= listing.phone %></td> -->
             <td><%= listing.guarantee %></td>
             <td> <%=listing.ranking  %></td>
             <td> <%=listing.created_at.strftime("%e/%m/%Y")  %></td>
             <td><%= link_to :ver, listing.link %></td>
 
-            <td><%= link_to 'Show', listing %></td>
-            <td><%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <!-- <td><%= link_to 'Show', listing %></td> -->
+            <!-- <td><%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
       <% end %>
     </tbody>
   </table>

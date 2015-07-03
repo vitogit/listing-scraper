@@ -10,6 +10,9 @@ gem 'mechanize', '2.7.3'
 gem 'bootstrap-generators', '3.3.4'
 gem 'sanitize', '4.0.0'
 gem 'nested_form_fields'
+gem 'ckeditor_rails', '4.4.8'
+gem 'jquery-datatables-rails', '~> 3.3.0'
+
 
 
 group :development do
