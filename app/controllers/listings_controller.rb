@@ -18,7 +18,7 @@ class ListingsController < ApplicationController
     @listings = []
     page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/pocitos!punta-carretas/1-dormitorio')
     pages = 0
-    max_pages = 1
+    max_pages = 20
     dolar_to_pesos = 26.5
     max_price = 18000
 
@@ -53,6 +53,7 @@ class ListingsController < ApplicationController
         end
       end
       next_page = page.link_with(text: /Siguiente/)
+      # break if next_page.nil? 
       page = next_page.click
       pages += 1
     end
