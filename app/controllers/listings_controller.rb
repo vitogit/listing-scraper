@@ -4,8 +4,14 @@ class ListingsController < ApplicationController
   # GET /listings
   # GET /listings.json
   def index
-    @listings = Listing.all.order(:price)
+    @show_deleted = params[:show_deleted]
+    if @show_deleted
+      @listings = Listing.order(:price)
+    else
+      @listings = Listing.where(deleted:false).order(:price)
+    end
   end
+
 
   def scrape_gallito
     agent = Mechanize.new
@@ -69,12 +75,10 @@ class ListingsController < ApplicationController
     sup_total = raw_listing.at("#primerosLi li:contains('Sup. Total:')").text
 
     @listing.description = @listing.description+". "+sup_total
-    puts "@listing.description______"+@listing.description
 
     # save pictures only if there are empty
     if !@listing.pictures.present?
       raw_pictures = raw_listing.search(".sliderImg")
-      puts "raw_pictures______"+raw_pictures.to_json
 
       @pictures = []
       raw_pictures.each do |raw_picture|
@@ -139,7 +143,8 @@ class ListingsController < ApplicationController
   # DELETE /listings/1
   # DELETE /listings/1.json
   def destroy
-    @listing.destroy
+    @listing.deleted = true
+    @listing.save
     respond_to do |format|
       format.html { redirect_to listings_url, notice: 'Listing was successfully destroyed.' }
       format.json { head :no_content }

@@ -7,3 +7,14 @@
 .page-header{
   margin:10px 0;
 }
+
+.ranking_1, .ranking_2 {
+  background-color: rgba(0, 0, 0, 0.29);
+} 
+
+.ranking_3, .ranking_4 {
+  background-color: rgba(255, 174, 0, 1);
+} 
+.ranking_5{
+  background-color: rgba(65, 255, 0, 0.6);
+} 

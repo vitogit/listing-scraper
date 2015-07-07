@@ -4,6 +4,9 @@
     <span class="glyphicon glyphicon-plus"></span>
     New Listing
   <% end %>
+  <%= link_to 'Show deleted', {controller: "listings", action: "index", show_deleted: true}, class: 'btn btn-primary new-listing', method: :get if !@show_deleted %>
+  <%= link_to 'Hide deleted', :root, class: 'btn btn-primary new-listing', method: :get  if @show_deleted  %>
+
 </div>
 
 <div class="table-responsive">
@@ -22,7 +25,7 @@
         <th>Created</th>
         <th>External</th>
         <!-- <th></th> -->
-        <!-- <th></th> -->
+        <th></th>
       </tr>
     </thead>
 
@@ -40,12 +43,12 @@
             <td><%= listing.description %></td>
             <!-- <td><%= listing.phone %></td> -->
             <td><%= listing.guarantee %></td>
-            <td> <%=listing.ranking  %></td>
+            <td  class="ranking_<%= listing.ranking %>"> <%=listing.ranking  %></td>
             <td> <%=listing.created_at.strftime("%e/%m/%Y")  %></td>
             <td><%= link_to :ver, listing.link %></td>
 
             <!-- <td><%= link_to 'Show', listing %></td> -->
-            <!-- <td><%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
+            <td><%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       <% end %>
     </tbody>
   </table>
