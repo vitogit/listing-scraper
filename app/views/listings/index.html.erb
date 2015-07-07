@@ -4,8 +4,8 @@
     <span class="glyphicon glyphicon-plus"></span>
     New Listing
   <% end %>
-  <%= link_to 'Show deleted', {controller: "listings", action: "index", show_deleted: true}, class: 'btn btn-primary new-listing', method: :get if !@show_deleted %>
-  <%= link_to 'Hide deleted', :root, class: 'btn btn-primary new-listing', method: :get  if @show_deleted  %>
+  <%= link_to 'Show deleted and without pics', {controller: "listings", action: "index", show_deleted: true}, class: 'btn btn-primary new-listing', method: :get if !@show_deleted %>
+  <%= link_to 'Hide deleted and without pics', :root, class: 'btn btn-primary new-listing', method: :get  if @show_deleted  %>
 
 </div>
 
@@ -33,7 +33,7 @@
       <%= content_tag_for(:tr, @listings) do |listing| %>
             <td>
               <%= link_to edit_listing_path(listing) do %>
-                <%= image_tag listing.img %>
+                <%= image_tag listing.img, width: '150'%>
               <% end %>
             </td>
             <td><%= listing.title %></td>

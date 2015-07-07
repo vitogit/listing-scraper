@@ -4,11 +4,12 @@ class ListingsController < ApplicationController
   # GET /listings
   # GET /listings.json
   def index
-    @show_deleted = params[:show_deleted]
-    if @show_deleted
+    @show_deleted_and_no_image = params[:show_deleted]
+
+    if @show_deleted_and_no_image
       @listings = Listing.order(:price)
     else
-      @listings = Listing.where(deleted:false).order(:price)
+      @listings = Listing.where(deleted:false).where("img not like ?", "%nodisponible%").order(:price)
     end
   end
 
