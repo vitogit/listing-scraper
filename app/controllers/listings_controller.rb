@@ -74,9 +74,9 @@ class ListingsController < ApplicationController
     @listing.description = raw_listing.at('#descripcionLarga').text.squish
     @listing.full_scraped = true
 
-    sup_total = raw_listing.at("#primerosLi li:contains('Sup. Total:')").text
+    sup_total = raw_listing.at("#primerosLi li:contains('Sup. Total:')").text if raw_listing.at("#primerosLi li:contains('Sup. Total:')")
 
-    @listing.description = @listing.description+". "+sup_total
+    @listing.description = @listing.description+". "+sup_total if sup_total
 
     # save pictures only if there are empty
     if !@listing.pictures.present?
@@ -89,6 +89,7 @@ class ListingsController < ApplicationController
         @listing.pictures << picture
       end
     end
+
   end
   # GET /listings/1
   # GET /listings/1.json
