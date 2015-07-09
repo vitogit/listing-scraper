@@ -1,4 +1,5 @@
 <div class="page-header">
+  <%= link_to 'Destroy', @listing, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
 
   <%= link_to listings_path, class: 'btn btn-default' do %>
     <span class="glyphicon glyphicon-list-alt"></span>
@@ -8,6 +9,7 @@
     <span class="glyphicon glyphicon-info-sign"></span>
     Show
   <% end %>
+  
 
   <% if @listing.full_scraped? %>
     <%= link_to scrapeit_listing_path, class: 'btn btn-success' , remote:true do %>
@@ -20,6 +22,7 @@
       Scrape it
     <% end %>
   <% end %>
+
 
 
 

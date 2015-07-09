@@ -150,7 +150,7 @@ class ListingsController < ApplicationController
     @listing.save
     respond_to do |format|
       format.html { redirect_to listings_url, notice: 'Listing was successfully destroyed.' }
-      format.json { head :no_content }
+      format.js {}
     end
   end
 
