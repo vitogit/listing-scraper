@@ -8,7 +8,7 @@ class Listing < ActiveRecord::Base
   end
 
   def id_title_price
-    id.to_s + " - " + title + " - " + price.to_s
+    id.to_s + " - " + title.to_s + " - " + price.to_s
   end
 
 end
