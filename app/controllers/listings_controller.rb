@@ -89,6 +89,9 @@ class ListingsController < ApplicationController
     @listing.full_scraped = true
 
     sup_total = raw_listing.at("#primerosLi li:contains('Sup. Total:')").text if raw_listing.at("#primerosLi li:contains('Sup. Total:')")
+    gc = raw_listing.at("#UlGenerales li:contains('Gastos Comunes:')").text if raw_listing.at("#UlGenerales li:contains('Gastos Comunes:')")
+    @listing.gc = gc.gsub(/\D/, '') if gc.present?
+
 
     @listing.description = @listing.description+". "+sup_total if sup_total
 
