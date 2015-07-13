@@ -26,6 +26,7 @@
         <!-- <th>Phone</th> -->
         <th>Ranking</th>
         <th>Created</th>
+        <th>Similar</th>
         <th>Action</th>
 
       </tr>
@@ -46,6 +47,7 @@
             <td> <div style="height:150px;overflow:hidden"> <%= listing.comment %> </div> </td>
             <td  class="ranking_<%= listing.ranking %>"> <%=listing.ranking  %></td>
             <td> <%=listing.created_at.strftime("%Y/%m/%e")  %></td>
+            <td> <%=listing.similar.join(' - ') if listing.similar %></td>
             <td><%= link_to :ver, listing.link %> <br><br>
                 <%= link_to :borrar, listing, method: :delete, data: { confirm: 'Are you sure?' }, remote:true %>
             </td>
