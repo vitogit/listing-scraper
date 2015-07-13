@@ -68,7 +68,6 @@ class ListingsController < ApplicationController
         end
       end
       next_page = page.link_with(text: /Siguiente/)
-      # break if next_page.nil?
       page = next_page.click
       pages += 1
     end
