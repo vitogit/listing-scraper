@@ -5,9 +5,12 @@ class ListingsController < ApplicationController
   # GET /listings.json
   def index
     @show_deleted_and_no_image = params[:show_deleted]
+    @hide_ugly = params[:hide_ugly]
 
     if @show_deleted_and_no_image
       @listings = Listing.order(:price)
+    elsif @hide_ugly
+      @listings = Listing.where(deleted:false).where('ranking >2').where("img not like ?", "%nodisponible%").order(:price)
     else
       @listings = Listing.where(deleted:false).where("img not like ?", "%nodisponible%").order(:price)
     end
@@ -17,7 +20,7 @@ class ListingsController < ApplicationController
   def scrape_gallito
     agent = Mechanize.new
     @listings = []
-    page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/pocitos!punta-carretas/1-dormitorio')
+    page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/pocitos!pocitos-nuevo!punta-carretas!villa-biarritz/1-dormitorio')
     pages = 0
     max_pages = 20
     dolar_to_pesos = 26.5
@@ -42,7 +45,9 @@ class ListingsController < ApplicationController
         listing.price = price_selector.text.gsub(/\D/, '') if price_selector
         if listing.currency.strip == "U$S"
           listing.price = listing.price * dolar_to_pesos
-          listing.currency += "(Converted to $U)"
+          listing.currency = "(c)"
+        else
+          listing.currency = ""
         end
 
         # listing.gc = raw_listing.search('.thumb01_precio')[0].text
@@ -54,7 +59,7 @@ class ListingsController < ApplicationController
         end
       end
       next_page = page.link_with(text: /Siguiente/)
-      # break if next_page.nil? 
+      # break if next_page.nil?
       page = next_page.click
       pages += 1
     end

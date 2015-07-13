@@ -1,11 +1,14 @@
 <div class="page-header">
   <h1>Listings</h1> <br>
-  <%= link_to new_listing_path, class: 'btn btn-primary new-listing' do %>
+  <!-- <%= link_to new_listing_path, class: 'btn btn-primary new-listing' do %>
     <span class="glyphicon glyphicon-plus"></span>
     New Listing
-  <% end %>
+  <% end %> -->
   <%= link_to 'Show deleted and without pics', {controller: "listings", action: "index", show_deleted: true}, class: 'btn btn-primary new-listing', method: :get if !@show_deleted %>
   <%= link_to 'Hide deleted and without pics', :root, class: 'btn btn-primary new-listing', method: :get  if @show_deleted  %>
+
+  <%= link_to 'Hide ugly', {controller: "listings", action: "index", hide_ugly: true}, class: 'btn btn-primary new-listing', method: :get if !@hide_ugly %>
+  <%= link_to 'Show ugly', :root, class: 'btn btn-primary new-listing', method: :get  if @hide_ugly %>
 
 </div>
 
@@ -15,17 +18,16 @@
       <tr>
         <th></th>
         <th>Title</th>
-        <th>Barrio</th>
+        <!-- <th>Barrio</th> -->
         <th>Price</th>
         <th>Gc</th>
         <th>Description</th>
+        <th>Comment</th>
         <!-- <th>Phone</th> -->
-        <th>Garantia</th>
         <th>Ranking</th>
         <th>Created</th>
-        <th>External</th>
-        <!-- <th></th> -->
-        <th></th>
+        <th>Action</th>
+
       </tr>
     </thead>
 
@@ -37,18 +39,17 @@
               <% end %>
             </td>
             <td><%= listing.title %></td>
-            <td><%= listing.zone %></td>
-            <td><%= listing.currency %> <%= listing.price %></td>
-            <td><%= listing.gc %></td>
+            <!-- <td><%= listing.zone %></td> -->
+            <td> <%= listing.price %> <%= listing.currency %></td>
+            <td><%= listing.gc %> <%= listing.guarantee %></td>
             <td> <div style="height:150px;overflow:hidden"> <%= listing.description %> </div> </td>
-            <!-- <td><%= listing.phone %></td> -->
-            <td><%= listing.guarantee %></td>
+            <td> <div style="height:150px;overflow:hidden"> <%= listing.comment %> </div> </td>
             <td  class="ranking_<%= listing.ranking %>"> <%=listing.ranking  %></td>
-            <td> <%=listing.created_at.strftime("%e/%m/%Y")  %></td>
-            <td><%= link_to :ver, listing.link %></td>
+            <td> <%=listing.created_at.strftime("%Y/%m/%e")  %></td>
+            <td><%= link_to :ver, listing.link %> <br><br>
+                <%= link_to :borrar, listing, method: :delete, data: { confirm: 'Are you sure?' }, remote:true %>
+            </td>
 
-            <!-- <td><%= link_to 'Show', listing %></td> -->
-            <td><%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' }, remote:true %></td>
       <% end %>
     </tbody>
   </table>
