@@ -61,7 +61,7 @@ class ListingsController < ApplicationController
             listing.save #new listing
           elsif old_listing.price.present? && old_listing.price != listing.price
             puts "old_listing_________"+old_listing.to_json
-            old_listing.comment = "" if old_listing.nil?
+            old_listing.comment = "" if old_listing.comment.nil?
             old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
             old_listing.price = listing.price
             old_listing.save
