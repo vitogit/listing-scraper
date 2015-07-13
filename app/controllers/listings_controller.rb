@@ -19,14 +19,14 @@ class ListingsController < ApplicationController
   def add_similar
     @listing.similar = [] if @listing.similar.nil?
     if params[:listing][:similar]
-      @listing.similar << params[:listing][:similar] 
+      @listing.similar << params[:listing][:similar]
       @listing.save
       similar_listing = Listing.find(params[:listing][:similar])
       similar_listing.similar = [] if similar_listing.similar.nil?
-      similar_listing.similar << @listing.id 
+      similar_listing.similar << @listing.id
       similar_listing.save
     end
-    redirect_to edit_listing_path(@listing.id), notice: 'Added similar listing.' 
+    redirect_to edit_listing_path(@listing.id), notice: 'Added similar listing.'
   end
 
 
@@ -45,6 +45,7 @@ class ListingsController < ApplicationController
 
         listing = Listing.new
         listing.from = "gallito"
+        listing.similar =
 
         listing.link = raw_listing.attributes['href']
         listing.external_id = listing.link.split('-')[-1]

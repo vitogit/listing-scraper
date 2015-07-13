@@ -29,7 +29,7 @@
 
 <br>
 <%= form_for @listing,  :url => {:action => "add_similar"} do |ff| %>
-  <%= ff.collection_select(:similar, Listing.all, :id, :id_title_price, prompt: true)  %>
+  <%= ff.collection_select(:similar, Listing.order(:id), :id, :id_title_price, prompt: true)  %>
   <%= ff.submit 'Add similar', class: 'btn btn-default' %>
 <% end %>
 <br>
