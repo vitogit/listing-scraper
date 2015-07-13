@@ -34,7 +34,8 @@ class ListingsController < ApplicationController
 
         listing.link = raw_listing.attributes['href']
         listing.external_id = listing.link.split('-')[-1]
-        next if Listing.find_by_external_id(listing.external_id).present?
+        old_listing = Listing.find_by_external_id(listing.external_id)
+        # next if old_listing.present?
 
         # listing.id = 0
         listing.title = raw_listing.at('.thumb_titulo').text
@@ -55,7 +56,15 @@ class ListingsController < ApplicationController
         listing.phone = raw_listing.at('.thumb_telefono').text.gsub(/\s+/, "")
 
         if listing.price < max_price
-          listing.save
+          # price change, add comment with the old price
+          if old_listing.price != listing.price
+            old_listing.comment = "" if old_listing.nil?
+            old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
+            old_listing.price = listing.price
+            old_listing.save
+          else
+            listing.save
+          end
         end
       end
       next_page = page.link_with(text: /Siguiente/)
@@ -107,7 +116,7 @@ class ListingsController < ApplicationController
   end
 
   def edit
-    puts "json________"+@listing.pictures.to_json
+    scrapeit if !@listing.full_scraped
   end
 
   # POST /listings

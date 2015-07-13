@@ -1,7 +1,7 @@
 
-
-  $('.ckeditor').ckeditor({
-  });
+  // 
+  // $('.ckeditor').ckeditor({
+  // });
 
 
 
