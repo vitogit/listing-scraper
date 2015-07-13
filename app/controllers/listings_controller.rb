@@ -1,5 +1,5 @@
 class ListingsController < ApplicationController
-  before_action :set_listing, only: [:show, :edit, :update, :destroy, :scrapeit]
+  before_action :set_listing, only: [:show, :edit, :update, :destroy, :scrapeit, :add_similar]
 
   # GET /listings
   # GET /listings.json
@@ -14,6 +14,19 @@ class ListingsController < ApplicationController
     else
       @listings = Listing.where(deleted:false).where("img not like ?", "%nodisponible%").order(:price)
     end
+  end
+
+  def add_similar
+    @listing.similar = [] if @listing.similar.nil?
+    if params[:listing][:similar]
+      @listing.similar << params[:listing][:similar] 
+      @listing.save
+      similar_listing = Listing.find(params[:listing][:similar])
+      similar_listing.similar = [] if similar_listing.similar.nil?
+      similar_listing.similar << @listing.id 
+      similar_listing.save
+    end
+    redirect_to edit_listing_path(@listing.id), notice: 'Added similar listing.' 
   end
 
 
@@ -142,8 +155,6 @@ class ListingsController < ApplicationController
   # PATCH/PUT /listings/1
   # PATCH/PUT /listings/1.json
   def update
-    puts "listin params_________"+listing_params.to_json
-    puts "@pictures_________"+@pictures.to_json
     respond_to do |format|
       if @listing.update(listing_params)
         format.html { redirect_to edit_listing_path(@listing.id), notice: 'Listing was successfully updated.' }
@@ -180,7 +191,7 @@ class ListingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def listing_params
-      params.require(:listing).permit(:full_scraped, :title, :price, :gc, :address, :phone, :link, :description,:comment, :guarantee, :ranking,
+      params.require(:listing).permit(:full_scraped, :title, :price, :gc, :address, :phone, :link, :description,:comment, :guarantee, :ranking, :similar,
                                       pictures_attributes: [:url])
     end
 end

@@ -6,5 +6,4 @@ namespace :general do
       e.save
     end 
   end
-
 end
