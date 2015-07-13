@@ -31,6 +31,7 @@ class ListingsController < ApplicationController
       raw_listings.each do |raw_listing|
 
         listing = Listing.new
+        listing.from = "gallito"
 
         listing.link = raw_listing.attributes['href']
         listing.external_id = listing.link.split('-')[-1]
