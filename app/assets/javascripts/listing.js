@@ -7,7 +7,7 @@
 
 $(document).on('page:change', function () {
     $('.datatable').DataTable({
-      "order": [[ 3, "desc" ]],
+      "order": [[ 7, "desc" ]],
       "pageLength": 50
     });
   });

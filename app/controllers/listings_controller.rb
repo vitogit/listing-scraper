@@ -8,11 +8,11 @@ class ListingsController < ApplicationController
     @hide_ugly = params[:hide_ugly]
 
     if @show_deleted_and_no_image
-      @listings = Listing.order(:price)
+      @listings = Listing.order('created_at desc')
     elsif @hide_ugly
-      @listings = Listing.where(deleted:false).where('ranking >2').where("img not like ?", "%nodisponible%").order(:price)
+      @listings = Listing.where(deleted:false).where('ranking >2').where("img not like ?", "%nodisponible%").order('created_at desc')
     else
-      @listings = Listing.where(deleted:false).where("img not like ?", "%nodisponible%").order(:price)
+      @listings = Listing.where(deleted:false).where("img not like ?", "%nodisponible%").order('created_at desc')
     end
   end
 
