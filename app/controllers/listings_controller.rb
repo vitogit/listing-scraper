@@ -45,7 +45,7 @@ class ListingsController < ApplicationController
 
         listing = Listing.new
         listing.from = "gallito"
-        listing.similar =
+        listing.similar = []
 
         listing.link = raw_listing.attributes['href']
         listing.external_id = listing.link.split('-')[-1]
