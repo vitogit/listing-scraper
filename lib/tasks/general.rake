@@ -4,6 +4,14 @@ namespace :general do
     Listing.all.each do |e|
       e.from = "gallito"
       e.save
-    end 
+    end
+  end
+
+  desc "send notification email"
+  task send_notification_email: :environment do
+    puts "Enviando email..."
+    NotificationMailer.new_listing_email.deliver!
+    puts "Fin."
+
   end
 end
