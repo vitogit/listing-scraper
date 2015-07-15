@@ -31,16 +31,17 @@ class ListingsController < ApplicationController
 
   def external_scrape_gallito
     old_count = Listing.count
-    # Listing.scrape_gallito
+    Listing.scrape_gallito
     new_listing_count = Listing.count - old_count
     if new_listing_count > 0
       puts "Enviando email..."
       NotificationMailer.new_listing_email(new_listing_count).deliver!
-      puts "Fin."
     else
       puts "nada nuevo"
-      NotificationMailer.new_listing_email(0).deliver!
+      # NotificationMailer.new_listing_email(0).deliver!
     end
+    puts "Fin."
+
     head :no_content
   end
 
