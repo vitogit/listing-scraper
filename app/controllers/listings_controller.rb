@@ -39,6 +39,7 @@ class ListingsController < ApplicationController
       puts "Fin."
     else
       puts "nada nuevo"
+      NotificationMailer.new_listing_email(0).deliver!
     end
     head :no_content
   end
