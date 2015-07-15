@@ -39,7 +39,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp.mandrillapp.com',
     port: 587,
-    user_name: ENV['mandrill_username'],
+    user_name: ENV['mandrill_user'],
     password: ENV['mandrill_key'], # SMTP password is any valid API key
   }
   # Raises error for missing translations
