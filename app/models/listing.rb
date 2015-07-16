@@ -42,13 +42,11 @@ class Listing < ActiveRecord::Base
         listing.img = raw_listing.at('img').attributes['src']
         listing.price = raw_listing.at('.ch-price').text[0..-3].gsub(/\D/, '')
 
-        puts "listing_________"+listing.to_json
         if listing.price < max_price
           # price change, add comment with the old price
           if old_listing.nil?
             listing.save #new listing
           elsif old_listing.price.present? && old_listing.price != listing.price
-            puts "old_listing_________"+old_listing.to_json
             old_listing.comment = "" if old_listing.comment.nil?
             old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
             old_listing.price = listing.price
@@ -57,8 +55,6 @@ class Listing < ActiveRecord::Base
         end
       end
     end
-
-    puts "counts____________"+(Listing.count-old_count).to_s
   end
 
   def self.scrape_gallito
@@ -82,7 +78,6 @@ class Listing < ActiveRecord::Base
         listing.external_id = listing.link.split('-')[-1]
         old_listing = Listing.find_by_external_id(listing.external_id)
         # next if old_listing.present?
-
         # listing.id = 0
         listing.title = raw_listing.at('.thumb_titulo').text
         listing.img = raw_listing.at('#div_rodea_datos img').attributes['data-original']
@@ -106,7 +101,6 @@ class Listing < ActiveRecord::Base
           if old_listing.nil?
             listing.save #new listing
           elsif old_listing.price.present? && old_listing.price != listing.price
-            puts "old_listing_________"+old_listing.to_json
             old_listing.comment = "" if old_listing.comment.nil?
             old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
             old_listing.price = listing.price

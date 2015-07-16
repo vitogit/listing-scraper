@@ -83,10 +83,7 @@ class ListingsController < ApplicationController
         picture.url = raw_picture.attributes['src'].text
         
         @listing.pictures << picture unless picture.url.include? '-M.' #remove thumbs images
-      end
-      puts "pictures count_________"+@pictures.count.to_s
-      puts "22222pictures count_________"+@pictures.uniq.count.to_s
-      
+      end    
     end
   end
 
