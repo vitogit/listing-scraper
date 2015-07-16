@@ -18,7 +18,7 @@
       <tr>
         <th></th>
         <th>Title</th>
-        <!-- <th>Barrio</th> -->
+        <th>From</th>
         <th>Price</th>
         <th>Gc</th>
         <th>Description</th>
@@ -40,7 +40,7 @@
               <% end %>
             </td>
             <td><%= listing.title %></td>
-            <!-- <td><%= listing.zone %></td> -->
+            <td><%= listing.from %></td>
             <td> <%= listing.price %> <%= listing.currency %></td>
             <td><%= listing.gc %> <%= listing.guarantee %></td>
             <td> <div style="height:150px;overflow:hidden"> <%= listing.description %> </div> </td>

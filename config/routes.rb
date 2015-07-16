@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
   end
   root 'listings#index'
-  get 'scrape_gallito', to: 'listings#scrape_gallito'
+  get 'scrape_all', to: 'listings#scrape_all'
   get 'external_scrape_gallito', to: 'listings#external_scrape_gallito'
 
 end

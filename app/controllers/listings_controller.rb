@@ -32,6 +32,8 @@ class ListingsController < ApplicationController
   def external_scrape_gallito
     old_count = Listing.count
     Listing.scrape_gallito
+    Listing.scrape_ml
+
     new_listing_count = Listing.count - old_count
     if new_listing_count > 0
       puts "Enviando email..."
@@ -45,13 +47,58 @@ class ListingsController < ApplicationController
     head :no_content
   end
 
-
-  def scrape_gallito
+  def scrape_all
     Listing.scrape_gallito
+    Listing.scrape_ml
     redirect_to :root, notice: 'Listings scraped.'
   end
 
+
+  def scrapeit_ml
+    agent = Mechanize.new
+    page = agent.get(@listing.link)
+    dolar_to_pesos = 26.5
+    max_price = 18000
+
+    raw_listing = agent.page.search(".vip-wrapper")
+
+    @listing.title = raw_listing.at('.bg-great-info h1').text
+    @listing.description = raw_listing.at('.description').text.squish
+    @listing.full_scraped = true
+
+    sup_total = raw_listing.at(".technical-details span:contains('Superficie construida')").next_element.text if raw_listing.at(".technical-details span:contains('Superficie construida')")
+    gc = raw_listing.at(".technical-details span:contains('Expensas')").next_element.text if raw_listing.at(".technical-details span:contains('Expensas')")
+    @listing.gc = gc.gsub(/\D/, '') if gc.present?
+
+
+    @listing.description = @listing.description+". "+sup_total if sup_total
+
+    # save pictures only if there are empty
+    if !@listing.pictures.present?
+      raw_pictures = raw_listing.search(".product-gallery-container div img")
+
+      @pictures = []
+      raw_pictures.each do |raw_picture|
+        picture = Picture.new
+        picture.url = raw_picture.attributes['src'].text
+        
+        @listing.pictures << picture unless picture.url.include? '-M.' #remove thumbs images
+      end
+      puts "pictures count_________"+@pictures.count.to_s
+      puts "22222pictures count_________"+@pictures.uniq.count.to_s
+      
+    end
+  end
+
   def scrapeit
+    if @listing.link.include? 'mercadolibre'
+      scrapeit_ml
+    elsif @listing.link.include? 'gallito'
+      scrapeit_gallito
+    end
+  end
+  
+  def scrapeit_gallito
     agent = Mechanize.new
     page = agent.get(@listing.link)
     dolar_to_pesos = 26.5
@@ -81,8 +128,8 @@ class ListingsController < ApplicationController
         @listing.pictures << picture
       end
     end
-
   end
+
   # GET /listings/1
   # GET /listings/1.json
   def show

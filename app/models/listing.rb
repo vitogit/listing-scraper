@@ -12,44 +12,53 @@ class Listing < ActiveRecord::Base
   end
 
   def self.scrape_ml
-    agent = Mechanize.new
     @listings = []
-    page = agent.get('http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/punta-carretas-montevideo/_PriceRange_0-17000_Ambientes_2')
-    pages = 0
     max_pages = 20
     dolar_to_pesos = 26.5
     max_price = 17000
+    #barrios punta carretas, pocitos, pocitos-nuevo
+    urls = ['http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/punta-carretas-montevideo/_PriceRange_0-17000_Ambientes_2',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-montevideo/_PriceRange_0-17000_Ambientes_2',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-nuevo-montevideo/_PriceRange_0-17000_Ambientes_2',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/villa-biarritz-montevideo/_PriceRange_0-17000_Ambientes_2'
+            ]
 
-    raw_listings = agent.page.search(".article")
-    raw_listings.each do |raw_listing|
-      listing = Listing.new
-      listing.from = "ml"
-      listing.similar = []
-  
-      listing.link = raw_listing.at('a').attributes['href']
-      listing.external_id = listing.link.split('-')[1]
-      old_listing = Listing.find_by_external_id(listing.external_id)
+    old_count = Listing.count
+    urls.each do |url|
+      agent = Mechanize.new
+      page = agent.get(url)
+      pages = 0
+      raw_listings = agent.page.search(".article")
+      raw_listings.each do |raw_listing|
+        listing = Listing.new
+        listing.from = "ml"
+        listing.similar = []
+    
+        listing.link = raw_listing.at('a').attributes['href']
+        listing.external_id = listing.link.split('-')[1]
+        old_listing = Listing.find_by_external_id(listing.external_id)
 
-      listing.title = raw_listing.at('a').text
-      listing.img = raw_listing.at('img').attributes['src']
-      listing.price = raw_listing.at('.ch-price').text[0..-3].gsub(/\D/, '')
+        listing.title = raw_listing.at('a').text
+        listing.img = raw_listing.at('img').attributes['src']
+        listing.price = raw_listing.at('.ch-price').text[0..-3].gsub(/\D/, '')
 
-      puts "listing_________"+listing.to_json
-      if listing.price < max_price
-        # price change, add comment with the old price
-        if old_listing.nil?
-          listing.save #new listing
-        elsif old_listing.price.present? && old_listing.price != listing.price
-          puts "old_listing_________"+old_listing.to_json
-          old_listing.comment = "" if old_listing.comment.nil?
-          old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
-          old_listing.price = listing.price
-          old_listing.save
+        puts "listing_________"+listing.to_json
+        if listing.price < max_price
+          # price change, add comment with the old price
+          if old_listing.nil?
+            listing.save #new listing
+          elsif old_listing.price.present? && old_listing.price != listing.price
+            puts "old_listing_________"+old_listing.to_json
+            old_listing.comment = "" if old_listing.comment.nil?
+            old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
+            old_listing.price = listing.price
+            old_listing.save
+          end
         end
       end
     end
-    
 
+    puts "counts____________"+(Listing.count-old_count).to_s
   end
 
   def self.scrape_gallito
