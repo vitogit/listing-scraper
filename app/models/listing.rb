@@ -39,7 +39,7 @@ class Listing < ActiveRecord::Base
         old_listing = Listing.find_by_external_id(listing.external_id)
 
         listing.title = raw_listing.at('a').text
-        listing.img = raw_listing.at('img').attributes['src']
+        listing.img = raw_listing.at('img').attributes['title'] #in the title is the real url, because with js it load it
         listing.price = raw_listing.at('.ch-price').text[0..-3].gsub(/\D/, '')
 
         if listing.price < max_price
@@ -60,9 +60,6 @@ class Listing < ActiveRecord::Base
               old_listing.save
             end
           end
-
-
-
         end
       end
     end
@@ -107,15 +104,24 @@ class Listing < ActiveRecord::Base
         listing.address = raw_listing.at('.thumb_txt h2').text
         listing.phone = raw_listing.at('.thumb_telefono').text.gsub(/\s+/, "")
 
+
         if listing.price < max_price
           # price change, add comment with the old price
           if old_listing.nil?
             listing.save #new listing
-          elsif old_listing.price.present? && old_listing.price != listing.price
-            old_listing.comment = "" if old_listing.comment.nil?
-            old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
-            old_listing.price = listing.price
-            old_listing.save
+          else
+            if old_listing.price.present? && old_listing.price != listing.price
+              old_listing.comment = "" if old_listing.comment.nil?
+              old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
+              old_listing.price = listing.price
+              old_listing.save
+            end
+            if old_listing.img.present? && old_listing.img != listing.img
+              old_listing.comment = "" if old_listing.comment.nil?
+              old_listing.comment += " CAMBIO IMAGEN antigua:"+old_listing.img.to_s
+              old_listing.img = listing.img
+              old_listing.save
+            end
           end
         end
       end
