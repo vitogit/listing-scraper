@@ -81,9 +81,9 @@ class ListingsController < ApplicationController
       raw_pictures.each do |raw_picture|
         picture = Picture.new
         picture.url = raw_picture.attributes['src'].text
-        
+
         @listing.pictures << picture unless picture.url.include? '-M.' #remove thumbs images
-      end    
+      end
     end
   end
 
@@ -94,7 +94,7 @@ class ListingsController < ApplicationController
       scrapeit_gallito
     end
   end
-  
+
   def scrapeit_gallito
     agent = Mechanize.new
     page = agent.get(@listing.link)
@@ -196,7 +196,7 @@ class ListingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def listing_params
-      params.require(:listing).permit(:full_scraped, :title, :price, :gc, :address, :phone, :link, :description,:comment, :guarantee, :ranking, :similar,
+      params.require(:listing).permit(:full_scraped, :title, :price, :gc, :address, :phone, :link, :description,:comment, :guarantee, :ranking, :similar, :img,
                                       pictures_attributes: [:url])
     end
 end

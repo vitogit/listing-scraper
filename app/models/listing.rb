@@ -33,7 +33,7 @@ class Listing < ActiveRecord::Base
         listing = Listing.new
         listing.from = "ml"
         listing.similar = []
-    
+
         listing.link = raw_listing.at('a').attributes['href']
         listing.external_id = listing.link.split('-')[1]
         old_listing = Listing.find_by_external_id(listing.external_id)
@@ -46,12 +46,23 @@ class Listing < ActiveRecord::Base
           # price change, add comment with the old price
           if old_listing.nil?
             listing.save #new listing
-          elsif old_listing.price.present? && old_listing.price != listing.price
-            old_listing.comment = "" if old_listing.comment.nil?
-            old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
-            old_listing.price = listing.price
-            old_listing.save
+          else
+            if old_listing.price.present? && old_listing.price != listing.price
+              old_listing.comment = "" if old_listing.comment.nil?
+              old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
+              old_listing.price = listing.price
+              old_listing.save
+            end
+            if old_listing.img.present? && old_listing.img != listing.img
+              old_listing.comment = "" if old_listing.comment.nil?
+              old_listing.comment += " CAMBIO IMAGEN antigua:"+old_listing.img.to_s
+              old_listing.img = listing.img
+              old_listing.save
+            end
           end
+
+
+
         end
       end
     end
