@@ -3,9 +3,9 @@ class Listing < ActiveRecord::Base
   accepts_nested_attributes_for :pictures
   serialize :similar
 
-  def similars
-    Listing.find(similar) if similar.present?
-  end
+  # def similars
+  #   Listing.find(similar) if similar.present?
+  # end
 
   def id_title_price
     id.to_s + " - " + title.to_s + " - " + price.to_s
@@ -20,15 +20,33 @@ class Listing < ActiveRecord::Base
     urls = ['http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/punta-carretas-montevideo/_PriceRange_0-17000_Ambientes_2',
             'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-montevideo/_PriceRange_0-17000_Ambientes_2',
             'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-nuevo-montevideo/_PriceRange_0-17000_Ambientes_2',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/villa-biarritz-montevideo/_PriceRange_0-17000_Ambientes_2'
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/villa-biarritz-montevideo/_PriceRange_0-17000_Ambientes_2',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/punta-carretas-montevideo/_PriceRange_0-17000_Ambientes_3',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-montevideo/_PriceRange_0-17000_Ambientes_3',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-nuevo-montevideo/_PriceRange_0-17000_Ambientes_3',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/villa-biarritz-montevideo/_PriceRange_0-17000_Ambientes_3',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/punta-carretas-montevideo/_PriceRange_0-17000_Ambientes_4',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-montevideo/_PriceRange_0-17000_Ambientes_4',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-nuevo-montevideo/_PriceRange_0-17000_Ambientes_4',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/villa-biarritz-montevideo/_PriceRange_0-17000_Ambientes_4'
             ]
 
     old_count = Listing.count
     urls.each do |url|
       agent = Mechanize.new
-      page = agent.get(url)
       pages = 0
-      raw_listings = agent.page.search(".article")
+
+      begin
+        puts "url___________"+url.to_s
+
+        page = agent.get(url)
+        raw_listings = page.search(".article")
+        puts "raw_listings___________"+raw_listings.to_json
+
+      rescue Exception => e
+        raw_listings = []
+      end
+
       raw_listings.each do |raw_listing|
         listing = Listing.new
         listing.from = "ml"
@@ -39,7 +57,7 @@ class Listing < ActiveRecord::Base
         old_listing = Listing.find_by_external_id(listing.external_id)
 
         listing.title = raw_listing.at('a').text
-        listing.img = raw_listing.at('img').attributes['title'] #in the title is the real url, because with js it load it
+        listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
         listing.price = raw_listing.at('.ch-price').text[0..-3].gsub(/\D/, '')
 
         if listing.price < max_price

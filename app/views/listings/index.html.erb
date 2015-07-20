@@ -27,7 +27,6 @@
         <th>Ranking</th>
         <th>Created</th>
         <th>Updated</th>
-        <th>Similar</th>
         <th>Action</th>
 
       </tr>
@@ -49,12 +48,6 @@
             <td  class="ranking_<%= listing.ranking %>"> <%=listing.ranking  %></td>
             <td> <%=listing.created_at.in_time_zone.strftime("%Y/%m/%e %H:%M:%S")  %></td>
             <td> <%=listing.updated_at.in_time_zone.strftime("%Y/%m/%e %H:%M:%S")  %></td>
-            <td>
-              <% listing.similars.try(:each) do |similar| %>
-                <%= link_to similar.id, edit_listing_path(similar.id) %>
-              <%end%>
-
-            </td>
             <td><%= link_to :ver, listing.link %> <br><br>
                 <%= link_to :borrar, listing, method: :delete, data: { confirm: 'Are you sure?' }, remote:true %>
             </td>
