@@ -52,8 +52,14 @@ class ListingsController < ApplicationController
     Listing.scrape_ml
     redirect_to :root, notice: 'Listings scraped.'
   end
-
-
+  def scrape_ml
+    Listing.scrape_ml
+    redirect_to :root, notice: 'Listings scraped.'
+  end
+  def scrape_gallito
+    Listing.scrape_gallito
+    redirect_to :root, notice: 'Listings scraped.'
+  end
   def scrapeit_ml
     agent = Mechanize.new
     page = agent.get(@listing.link)

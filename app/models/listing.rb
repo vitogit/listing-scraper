@@ -38,11 +38,9 @@ class Listing < ActiveRecord::Base
 
       begin
         puts "url___________"+url.to_s
-
         page = agent.get(url)
         raw_listings = page.search(".article")
         puts "raw_listings___________"+raw_listings.to_json
-
       rescue Exception => e
         raw_listings = []
       end
