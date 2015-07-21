@@ -37,10 +37,8 @@ class Listing < ActiveRecord::Base
       pages = 0
 
       begin
-        puts "url___________"+url.to_s
         page = agent.get(url)
         raw_listings = page.search(".article")
-        puts "raw_listings___________"+raw_listings.to_json
       rescue Exception => e
         raw_listings = []
       end
@@ -57,6 +55,8 @@ class Listing < ActiveRecord::Base
         listing.title = raw_listing.at('a').text
         listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
         listing.price = raw_listing.at('.ch-price').text[0..-3].gsub(/\D/, '')
+        next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
+        next if listing.price > max_price 
 
         if listing.price < max_price
           # price change, add comment with the old price
@@ -101,14 +101,14 @@ class Listing < ActiveRecord::Base
         listing.link = raw_listing.attributes['href']
         listing.external_id = listing.link.split('-')[-1]
         old_listing = Listing.find_by_external_id(listing.external_id)
-        # next if old_listing.present?
-        # listing.id = 0
-        listing.title = raw_listing.at('.thumb_titulo').text
         listing.img = raw_listing.at('#div_rodea_datos img').attributes['data-original']
-
         price_selector = raw_listing.at('.thumb01_precio, .thumb02_precio')
-        listing.currency = price_selector.text.gsub(/[\d^.]/, '') if price_selector
         listing.price = price_selector.text.gsub(/\D/, '') if price_selector
+
+        next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
+        next if listing.price > max_price 
+
+        listing.currency = price_selector.text.gsub(/[\d^.]/, '') if price_selector
         if listing.currency.strip == "U$S"
           listing.price = listing.price * dolar_to_pesos
           listing.currency = "(c)"
@@ -116,10 +116,9 @@ class Listing < ActiveRecord::Base
           listing.currency = ""
         end
 
-        # listing.gc = raw_listing.search('.thumb01_precio')[0].text
+        listing.title = raw_listing.at('.thumb_titulo').text
         listing.address = raw_listing.at('.thumb_txt h2').text
         listing.phone = raw_listing.at('.thumb_telefono').text.gsub(/\s+/, "")
-
 
         if listing.price < max_price
           # price change, add comment with the old price
