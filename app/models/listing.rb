@@ -90,6 +90,10 @@ class Listing < ActiveRecord::Base
     dolar_to_pesos = 26.5
     max_price = 18000
 
+    # add /ord_rec to sort by recent
+    # raw_listings = agent.page.search("#grillaavisos a")
+    # return if Listing.find_by_link(raw_listings.first.attributes['href'].to_s).present?
+
     while  pages < max_pages && page.link_with(text: /Siguiente/)  do
       raw_listings = agent.page.search("#grillaavisos a")
       raw_listings.each do |raw_listing|
