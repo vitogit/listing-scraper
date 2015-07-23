@@ -69,7 +69,7 @@ class ListingsController < ApplicationController
     raw_listing = agent.page.search(".vip-wrapper")
 
     @listing.title = raw_listing.at('.bg-great-info h1').text
-    @listing.description = raw_listing.at('.description').text.squish
+    @listing.description = raw_listing.search('.description p').map(&:text).join(' ')
     @listing.full_scraped = true
 
     sup_total = raw_listing.at(".technical-details span:contains('Superficie construida')").next_element.text if raw_listing.at(".technical-details span:contains('Superficie construida')")
