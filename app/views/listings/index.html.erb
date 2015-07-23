@@ -49,7 +49,8 @@
             <td> <%=listing.created_at.in_time_zone.strftime("%Y/%m/%e %H:%M:%S")  %></td>
             <td> <%=listing.updated_at.in_time_zone.strftime("%Y/%m/%e %H:%M:%S")  %></td>
             <td><%= link_to :ver, listing.link %> <br><br>
-                <%= link_to :borrar, listing, method: :delete, data: { confirm: 'Are you sure?' }, remote:true %>
+                <%= link_to :borrar, listing, method: :delete, data: { confirm: 'Are you sure?' }, remote:true if !listing.deleted %>
+                <%= 'Borrado' if listing.deleted %>
             </td>
 
       <% end %>
