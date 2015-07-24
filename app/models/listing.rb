@@ -88,7 +88,7 @@ class Listing < ActiveRecord::Base
     pages = 0
     max_pages = 20
     dolar_to_pesos = 26.5
-    max_price = 18000
+    max_price = 17000
 
     # add /ord_rec to sort by recent
     # raw_listings = agent.page.search("#grillaavisos a")
