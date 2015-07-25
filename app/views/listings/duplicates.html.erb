@@ -1,0 +1,51 @@
+<h1>Duplicates Images</h1>
+<table class="table table-bordered">
+  <tr>
+    <th>img  </th>
+    <th>link  </th>
+  </tr>
+
+  <tr>
+    <% @duplicates.each do |img, aptos| %>
+    <td> <%= image_tag img, width: '150', heigth: 'auto'%></td>
+    <td >
+      <% aptos.each do |apto| %>
+        <%= link_to apto.link, apto.link %><br>
+      <% end %>
+    </td>
+  </tr>
+  <% end %>
+</table>
+
+<h1>Duplicates Titles</h1>
+<table class="table table-bordered">
+  <tr>
+    <th>img  </th>
+    <th>title  </th>
+    <th>from  </th>
+    <th>price  </th>
+    <th>description  </th>
+    <th>comments  </th>
+  </tr>
+
+    <% @duplicates_title.each do |title, listings| %>
+      <% listings.each do |listing| %>
+        <tr>
+
+          <td>
+            <%= link_to edit_listing_path(listing) do %>
+              <%= image_tag listing.img, width: '150'%>
+            <% end %>
+          </td>
+          <td> <div style="width:150px;height:150px;overflow:hidden"><%=listing.title %> </div></td>
+          <td><%= listing.from %></td>
+          <td> <%= listing.price %> <%= listing.currency %></td>
+          <td><%= listing.description %></td>
+          <td><%= listing.comment %></td>
+        </tr>
+      <% end %>
+      <tr class="blank_row">
+          <td colspan="6"></td>
+      </tr>
+  <% end %>
+</table>

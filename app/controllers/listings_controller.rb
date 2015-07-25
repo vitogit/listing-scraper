@@ -14,6 +14,16 @@ class ListingsController < ApplicationController
     else
       @listings = Listing.where(deleted:false).where("img not like ?", "%nodisponible%").order('created_at desc')
     end
+
+
+  end
+
+  def duplicates
+    # @duplicates = Listing.all.group_by{|elem| elem[:title]}.delete_if { |k, v| v.size == 1 }
+    @duplicates_img = Listing.all.group_by{|elem| elem[:img]}.delete_if { |k, v| v.size == 1 }
+    @duplicates = Picture.joins(:listing).select('listing_id AS id',:url,'listings.link AS link').group_by{|elem| elem[:url]}.delete_if { |k, v| v.size == 1 }.merge @duplicates_img
+    @duplicates_title = Listing.order(:title).group_by{|elem| elem[:title]}.delete_if { |k, v| v.size == 1 }
+
   end
 
   def add_similar

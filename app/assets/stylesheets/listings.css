@@ -22,3 +22,7 @@
 .datatable {
   width:1300px;
 }
+.blank_row {
+    height: 20px !important; /* Overwrite any previous rules */
+    background-color: grey;
+}
