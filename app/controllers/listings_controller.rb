@@ -54,11 +54,11 @@ class ListingsController < ApplicationController
   end
   def scrape_ml
     Listing.scrape_ml
-    redirect_to :root, notice: 'Listings scraped.'
+    redirect_to :root, notice: 'Mercado Libre scraped!'
   end
   def scrape_gallito
     Listing.scrape_gallito
-    redirect_to :root, notice: 'Listings scraped.'
+    redirect_to :root, notice: 'Gallito scraped!'
   end
   def scrapeit_ml
     agent = Mechanize.new
@@ -99,6 +99,7 @@ class ListingsController < ApplicationController
     elsif @listing.link.include? 'gallito'
       scrapeit_gallito
     end
+      flash.now[:notice] = 'scraped'
   end
 
   def scrapeit_gallito

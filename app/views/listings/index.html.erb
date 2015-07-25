@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>Listings</h1> <br>
+  <h1>ScraperMagic</h1> <br>
   <!-- <%= link_to new_listing_path, class: 'btn btn-primary new-listing' do %>
     <span class="glyphicon glyphicon-plus"></span>
     New Listing
@@ -12,7 +12,7 @@
 
 </div>
 
-<div class="table-responsive">
+<div class="table-responsive listing-table">
   <table class="table table-striped table-bordered table-hover datatable">
     <thead>
       <tr>
@@ -39,12 +39,12 @@
                 <%= image_tag listing.img, width: '150'%>
               <% end %>
             </td>
-            <td><%= listing.title %></td>
+            <td> <div style="width:150px;height:150px;overflow:hidden"><%=listing.title %> </div></td>
             <td><%= listing.from %></td>
             <td> <%= listing.price %> <%= listing.currency %></td>
             <td><%= listing.gc %> <%= listing.guarantee %></td>
-            <td> <div style="height:150px;overflow:hidden"> <%= listing.description %> </div> </td>
-            <td> <div style="height:150px;overflow:hidden"> <%= listing.comment %> </div> </td>
+            <td> <div style="width:190px;height:150px;overflow:hidden"> <%= listing.description %> </div> </td>
+            <td> <div style="width:190px;height:150px;overflow:hidden"> <%= listing.comment %> </div> </td>
             <td  class="ranking_<%= listing.ranking %>"> <%=listing.ranking  %></td>
             <td> <%=listing.created_at.in_time_zone.strftime("%Y/%m/%e %H:%M:%S")  %></td>
             <td> <%=listing.updated_at.in_time_zone.strftime("%Y/%m/%e %H:%M:%S")  %></td>
