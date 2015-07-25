@@ -21,7 +21,7 @@ class ListingsController < ApplicationController
   def duplicates
     # @duplicates = Listing.all.group_by{|elem| elem[:title]}.delete_if { |k, v| v.size == 1 }
     @duplicates_img = Listing.all.group_by{|elem| elem[:img]}.delete_if { |k, v| v.size == 1 }
-    @duplicates = Picture.joins(:listing).select('listing_id AS id',:url,'listings.link AS link').group_by{|elem| elem[:url]}.delete_if { |k, v| v.size == 1 }.merge @duplicates_img
+    @duplicates = Picture.joins(:listing).select('listing_id AS id',:url,'listings.title AS title').group_by{|elem| elem[:url]}.delete_if { |k, v| v.size == 1 }.merge @duplicates_img
     @duplicates_title = Listing.order(:title).group_by{|elem| elem[:title]}.delete_if { |k, v| v.size == 1 }
 
   end

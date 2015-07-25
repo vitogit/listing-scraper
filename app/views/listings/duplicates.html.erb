@@ -10,7 +10,7 @@
     <td> <%= image_tag img, width: '150', heigth: 'auto'%></td>
     <td >
       <% aptos.each do |apto| %>
-        <%= link_to apto.link, apto.link %><br>
+        <%= link_to apto.title, edit_listing_path(apto) %><br>
       <% end %>
     </td>
   </tr>
