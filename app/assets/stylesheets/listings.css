@@ -26,3 +26,7 @@
     height: 20px !important; /* Overwrite any previous rules */
     background-color: grey;
 }
+
+.container {
+  width:1350px;
+}
