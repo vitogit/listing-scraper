@@ -13,19 +13,19 @@ gem 'nested_form_fields'
 gem 'jquery-datatables-rails', '~> 3.3.0'
 
 
-
-group :development do
+group :development, :test do
   gem 'sqlite3',     '1.3.9'
   gem 'web-console', '2.0.0.beta3'
   gem 'better_errors', '2.1.1'
-  gem "binding_of_caller"
-
+  gem 'binding_of_caller'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'database_cleaner'
+  gem 'rubocop'
 end
 
-group :test do
-  gem 'sqlite3',     '1.3.9'
-  gem 'web-console', '2.0.0.beta3'
-end
 
 group :production do
   gem 'pg',             '0.17.1'
