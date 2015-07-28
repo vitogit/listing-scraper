@@ -203,8 +203,8 @@ class ListingsController < ApplicationController
   end
 
   def statistics
-    @listings = Listing.all.group_by{|x| x.created_at.strftime("%Y-%m-%d") }
-
+    start_date = Date.new(2015, 7, 24)
+    @listings = Listing.where(created_at: start_date.beginning_of_day..Date.today.end_of_day).order(created_at: :desc).group_by{|x| x.created_at.strftime("%Y-%m-%d %A") }
   end
 
   private
