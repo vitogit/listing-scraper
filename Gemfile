@@ -24,6 +24,9 @@ group :development, :test do
   gem 'faker'
   gem 'database_cleaner'
   gem 'rubocop'
+  gem 'vcr'
+  gem 'webmock'
+
 end
 
 

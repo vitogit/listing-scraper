@@ -17,17 +17,21 @@ RSpec.describe ListingsController, type: :controller do
     end
   end
 
-  describe 'GET edit' do
-    it 'should assign @administrator' do
+  describe 'GET edit', :vcr do
+    it 'should assign @listing' do
       listing = FactoryGirl.create(:listing)
-      get :edit, id: listing.id
-      expect(assigns(:listing)).to eq(listing)
+       VCR.use_cassette 'edit_listing' do
+          get :edit, id: listing.id
+          expect(assigns(:listing)).to eq(listing)
+       end
     end
 
     it 'renders the :edit view' do
       listing = FactoryGirl.create(:listing)
-      get :edit, id: listing.id
-      expect(response).to render_template('edit')
+       VCR.use_cassette 'edit_listing' do
+        get :edit, id: listing.id
+        expect(response).to render_template('edit')
+       end
     end
   end
 
