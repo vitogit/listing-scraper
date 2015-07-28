@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'scrape_ml', to: 'listings#scrape_ml'
   get 'scrape_gallito', to: 'listings#scrape_gallito'
   get 'duplicates', to: 'listings#duplicates'
+  get 'statistics', to: 'listings#statistics'
   # get 'external_scrape_gallito', to: 'listings#external_scrape_gallito'
 
 end

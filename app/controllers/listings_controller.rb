@@ -21,7 +21,6 @@ class ListingsController < ApplicationController
     @duplicates_img = Listing.all.group_by{|elem| elem[:img]}.delete_if { |k, v| v.size == 1 }
     @duplicates = Picture.joins(:listing).select('listing_id AS id',:url,'listings.title AS title').group_by{|elem| elem[:url]}.delete_if { |k, v| v.size == 1 }.merge @duplicates_img
     @duplicates_title = Listing.order(:title).group_by{|elem| elem[:title]}.delete_if { |k, v| v.size == 1 }
-
   end
 
   def add_similar
@@ -201,6 +200,11 @@ class ListingsController < ApplicationController
       format.html { redirect_to listings_url, notice: 'Listing was successfully destroyed.' }
       format.js {}
     end
+  end
+
+  def statistics
+    @listings = Listing.all.group_by{|x| x.created_at.strftime("%Y-%m-%d") }
+
   end
 
   private
