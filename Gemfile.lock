@@ -255,3 +255,6 @@ DEPENDENCIES
   vcr
   web-console (= 2.0.0.beta3)
   webmock
+
+BUNDLED WITH
+   1.10.4
