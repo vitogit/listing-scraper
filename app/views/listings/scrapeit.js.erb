@@ -1,11 +1,9 @@
 <% @listing.attributes.each_pair do |name, value| %>
-  // console.log("name____<%= name %>");
-  // console.log("va____<%= value.to_s %>");
   var input_field = $('#<%=@listing.class.name.downcase%>_<%=name%>');
   input_field.val("<%= value.to_s %>");
-
 <% end %>
 
+$('.listing_pictures img').remove();
 <% @listing.pictures.each do |picture| %>
    $('.listing_pictures').prepend('<img src="<%= picture.url %>" />');
 <% end %>
