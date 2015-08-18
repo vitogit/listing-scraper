@@ -247,6 +247,3 @@ DEPENDENCIES
   uglifier (= 2.5.3)
   vcr
   web-console (= 2.0.0.beta3)
-
-BUNDLED WITH
-   1.10.4

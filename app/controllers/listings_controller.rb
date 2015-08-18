@@ -85,19 +85,17 @@ class ListingsController < ApplicationController
 
 
     @listing.description = @listing.description+". "+sup_total if sup_total
-
-    # save pictures only if there are empty
-    if !@listing.pictures.present?
-      raw_pictures = raw_listing.search(".product-gallery-container div img")
-
-      @pictures = []
-      raw_pictures.each do |raw_picture|
-        picture = Picture.new
-        picture.url = raw_picture.attributes['src'].text
-
-        @listing.pictures << picture unless picture.url.include? '-M.' #remove thumbs images
-      end
+    puts '@listing.pictures_______'+@listing.pictures.size.to_s
+    # bring the pics again
+    @listing.pictures.destroy_all
+    raw_pictures = raw_listing.search(".product-gallery-container div img")
+    @pictures = []
+    raw_pictures.each do |raw_picture|
+      picture = Picture.new
+      picture.url = raw_picture.attributes['src'].text
+      @listing.pictures << picture unless picture.url.include? '-M.' #remove thumbs images
     end
+    puts '_____________'
   end
 
   def scrapeit
@@ -129,15 +127,14 @@ class ListingsController < ApplicationController
     @listing.description = @listing.description+". "+sup_total if sup_total
 
     # save pictures only if there are empty
-    if !@listing.pictures.present?
-      raw_pictures = raw_listing.search(".sliderImg")
+    @listing.pictures.destroy_all
+    raw_pictures = raw_listing.search(".sliderImg")
 
-      @pictures = []
-      raw_pictures.each do |raw_picture|
-        picture = Picture.new
-        picture.url = raw_picture.attributes['href']
-        @listing.pictures << picture
-      end
+    @pictures = []
+    raw_pictures.each do |raw_picture|
+      picture = Picture.new
+      picture.url = raw_picture.attributes['href']
+      @listing.pictures << picture
     end
   end
 
