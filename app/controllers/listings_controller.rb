@@ -101,7 +101,7 @@ class ListingsController < ApplicationController
     dupe = Listing.where( title: @listing.title, description: @listing.description).order(:created_at).first
     puts "dupe_____"+dupe.to_json
     if dupe
-      @listing.comment = @listing.comment + "Duplicado: "+dupe.link
+      @listing.comment = @listing.comment + " Duplicado: "+dupe.link
     end
   end
 
