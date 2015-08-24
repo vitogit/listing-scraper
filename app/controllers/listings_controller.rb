@@ -100,8 +100,8 @@ class ListingsController < ApplicationController
     #Search duplicates
     dupes = Listing.where( title: @listing.title, description: @listing.description).order(:created_at)
     puts "dupes_____"+dupes.to_json
-    puts "dupes_size____"+dupes.size
-    puts "dupes_count____"+dupes.count
+    puts "dupes_size____"+dupes.size.to_s
+    puts "dupes_count____"+dupes.count.to_s
     if dupes.size > 1
       dupe = dupes.first
       puts "dupe_____"+dupe.to_json
