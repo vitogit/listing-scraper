@@ -22,9 +22,11 @@
 .ranking_7, .ranking_8, .ranking_9, .ranking_10{
   background-color: rgba(127, 0, 255, 0.6);
 }
+
 .datatable {
   width:1300px;
 }
+
 .blank_row {
     height: 20px !important; /* Overwrite any previous rules */
     background-color: grey;
