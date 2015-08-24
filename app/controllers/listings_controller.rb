@@ -105,7 +105,7 @@ class ListingsController < ApplicationController
     if dupes.size > 1
       dupe = dupes.first
       puts "dupe_____"+dupe.to_json
-      @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+@listing.id.to_s+"/edit"
+      @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
     end
   end
 
