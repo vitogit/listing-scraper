@@ -98,10 +98,9 @@ class ListingsController < ApplicationController
     puts 'listing_____________'+@listing.to_json
 
     #Search duplicates
-    dupe = Listing.where( title: @listing.title, description: @listing.description).where.not(id: @listing.id).order(:created_at).first
-    puts "dupe_____"+dupe.to_json
-    puts "URL_____"+request.base_url+"/listings/"+@listing.id.to_s+"/edit"
-    if dupe
+    dupes = Listing.where( title: @listing.title, description: @listing.description).order(:created_at)
+    if dupes.size >1
+      dupe = dupes.first
       @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+@listing.id.to_s+"/edit"
     end
   end
