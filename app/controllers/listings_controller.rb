@@ -6,7 +6,7 @@ class ListingsController < ApplicationController
   def index
     @show_deleted_and_no_image = params[:show_deleted]
     @hide_ugly = params[:hide_ugly]
-    
+
     if @show_deleted_and_no_image
       @listings = Listing.order('created_at desc')
     elsif @hide_ugly
@@ -105,6 +105,7 @@ class ListingsController < ApplicationController
     if dupes.size > 1
       dupe = dupes.first
       puts "dupe_____"+dupe.to_json
+      @listing.comment = "" if @listing.comment.nil?
       @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
     end
   end
