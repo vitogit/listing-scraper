@@ -71,7 +71,6 @@ class ListingsController < ApplicationController
     agent = Mechanize.new
     page = agent.get(@listing.link)
     dolar_to_pesos = 26.5
-    max_price = 18000
 
     raw_listing = agent.page.search(".vip-wrapper")
 
@@ -123,7 +122,6 @@ class ListingsController < ApplicationController
     agent = Mechanize.new
     page = agent.get(@listing.link)
     dolar_to_pesos = 26.5
-    max_price = 18000
 
     raw_listing = agent.page.search(".contendor")
 

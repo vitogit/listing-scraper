@@ -56,9 +56,9 @@ class Listing < ActiveRecord::Base
         listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
         listing.price = raw_listing.at('.ch-price').text[0..-3].gsub(/\D/, '')
         next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
-        next if listing.price > max_price 
+        next if listing.price > max_price
 
-        if listing.price < max_price
+        if listing.price <= max_price
           # price change, add comment with the old price
           if old_listing.nil?
             listing.save #new listing
@@ -110,7 +110,7 @@ class Listing < ActiveRecord::Base
         listing.price = price_selector.text.gsub(/\D/, '') if price_selector
 
         next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
-        next if listing.price > max_price 
+        next if listing.price > max_price
 
         listing.currency = price_selector.text.gsub(/[\d^.]/, '') if price_selector
         if listing.currency.strip == "U$S"
@@ -124,7 +124,7 @@ class Listing < ActiveRecord::Base
         listing.address = raw_listing.at('.thumb_txt h2').text
         listing.phone = raw_listing.at('.thumb_telefono').text.gsub(/\s+/, "")
 
-        if listing.price < max_price
+        if listing.price <= max_price
           # price change, add comment with the old price
           if old_listing.nil?
             listing.save #new listing
