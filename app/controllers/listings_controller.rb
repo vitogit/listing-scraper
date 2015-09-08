@@ -61,11 +61,11 @@ class ListingsController < ApplicationController
   end
   def scrape_ml
     Listing.scrape_ml
-    redirect_to :root, notice: 'Mercado Libre scraped!'
+    redirect_to :root, notice: 'Bichi STOP the scraping...Mercado Libre scraped!'
   end
   def scrape_gallito
     Listing.scrape_gallito
-    redirect_to :root, notice: 'Gallito scraped!'
+    redirect_to :root, notice: 'Bichi STOP the scraping...Gallito scraped!'
   end
   def scrapeit_ml
     agent = Mechanize.new
