@@ -1,28 +1,14 @@
-== README
+== Listing Scraper
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Scrape real state sites: gallito.com.uy, mercadolibre.com.uy, 
 
 Things you may want to cover:
 
-* Ruby version
+* List, edit, rank the scraped listing
 
-* System dependencies
+* Find duplicates
 
-* Configuration
+* Add comments
 
-* Database creation
+* Filter and search
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
