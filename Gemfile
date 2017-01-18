@@ -25,6 +25,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'rubocop'
   gem 'vcr'
+  gem "pry-rails"
   # gem 'webmock'
 
 end
