@@ -118,7 +118,7 @@ class ListingsController < ApplicationController
     agent = Mechanize.new
     page = agent.get(@listing.link)
 
-    raw_listing = agent.page.search(".contendor")
+    raw_listing = agent.page.at(".contendor")
 
     @listing.title = raw_listing.at('.titulo').text
     @listing.description = raw_listing.at('#descripcionLarga').text.squish
@@ -133,13 +133,12 @@ class ListingsController < ApplicationController
 
     # save pictures only if there are empty
     @listing.pictures.destroy_all
-    raw_pictures = raw_listing.search(".sliderImg")
-
+    raw_pictures = raw_listing.search("#gal1 a")
     @pictures = []
     raw_pictures.each do |raw_picture|
       picture = Picture.new
-      picture.url = raw_picture.attributes['href']
-      @listing.pictures << picture
+      picture.url = raw_picture.attributes['data-image'].text
+      @listing.pictures << picture unless picture.url.include? '58x44'
     end
   end
 

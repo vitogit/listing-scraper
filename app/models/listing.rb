@@ -84,29 +84,29 @@ class Listing < ActiveRecord::Base
   def self.scrape_gallito
     agent = Mechanize.new
     @listings = []
-    page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/pocitos!pocitos-nuevo!punta-carretas!villa-biarritz/1-dormitorio')
+    page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/cordon!parque-batlle!parque-rodo!pocitos!pocitos-nuevo!tres-cruces/2-dormitorios/pre-0-18000-pesos')
     pages = 0
     max_pages = 20
-    dolar_to_pesos = 26.5
-    max_price = 17000
+    dolar_to_pesos = 28.5
+    max_price = 18000
 
     # add /ord_rec to sort by recent
     # raw_listings = agent.page.search("#grillaavisos a")
     # return if Listing.find_by_link(raw_listings.first.attributes['href'].to_s).present?
 
     while  pages < max_pages && page.link_with(text: /Siguiente/)  do
-      raw_listings = agent.page.search("#grillaavisos a")
+      raw_listings = agent.page.search("#grillaavisos article")
       raw_listings.each do |raw_listing|
 
         listing = Listing.new
         listing.from = "gallito"
         listing.similar = []
 
-        listing.link = raw_listing.attributes['href']
+        listing.link = raw_listing.at('.img-seva').attributes['alt'].text
         listing.external_id = listing.link.split('-')[-1]
         old_listing = Listing.find_by_external_id(listing.external_id)
-        listing.img = raw_listing.at('#div_rodea_datos img').attributes['data-original']
-        price_selector = raw_listing.at('.thumb01_precio, .thumb02_precio')
+        listing.img = raw_listing.at('.img-seva').attributes['src'].text
+        price_selector = raw_listing.at('.contenedor-info strong')
         listing.price = price_selector.text.gsub(/\D/, '') if price_selector
 
         next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
@@ -120,9 +120,8 @@ class Listing < ActiveRecord::Base
           listing.currency = ""
         end
 
-        listing.title = raw_listing.at('.thumb_titulo').text
-        listing.address = raw_listing.at('.thumb_txt h2').text
-        listing.phone = raw_listing.at('.thumb_telefono').text.gsub(/\s+/, "")
+        listing.title = raw_listing.at('.mas-info h2').text
+        # listing.phone = raw_listing.at('.movil a').text.gsub(/\s+/, "")
 
         if listing.price <= max_price
           # price change, add comment with the old price
