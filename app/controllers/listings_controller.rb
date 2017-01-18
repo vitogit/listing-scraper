@@ -61,49 +61,45 @@ class ListingsController < ApplicationController
   end
   def scrape_ml
     Listing.scrape_ml
-    redirect_to :root, notice: 'Bichi STOP the scraping...Mercado Libre scraped!'
+    redirect_to :root, notice: 'Mercado Libre scraped!'
   end
   def scrape_gallito
     Listing.scrape_gallito
-    redirect_to :root, notice: 'Bichi STOP the scraping...Gallito scraped!'
+    redirect_to :root, notice: 'Gallito scraped!'
   end
   def scrapeit_ml
     agent = Mechanize.new
     page = agent.get(@listing.link)
-    dolar_to_pesos = 26.5
 
-    raw_listing = agent.page.search(".vip-wrapper")
+    raw_listing = agent.page.search(".nav-main-content")
 
-    @listing.title = raw_listing.at('.bg-great-info h1').text
-    @listing.description = raw_listing.search('.description p').map(&:text).join(' ')
+    @listing.title = raw_listing.at('.vip-product-info__development__name').text
+    @listing.description = raw_listing.search('.preformated-text').map(&:text).join(' ')
     @listing.full_scraped = true
 
-    sup_total = raw_listing.at(".technical-details span:contains('Superficie construida')").next_element.text if raw_listing.at(".technical-details span:contains('Superficie construida')")
-    gc = raw_listing.at(".technical-details span:contains('Expensas')").next_element.text if raw_listing.at(".technical-details span:contains('Expensas')")
+    sup_total = raw_listing.at(".attribute-group span:contains('Superficie construida')").next_element.text if raw_listing.at(".attribute-group  span:contains('Superficie construida')")
+    gc = raw_listing.at(".attribute-group span:contains('Expensas')").next_element.text if raw_listing.at(".attribute-group span:contains('Expensas')")
     @listing.gc = gc.gsub(/\D/, '') if gc.present?
 
 
     @listing.description = @listing.description+". "+sup_total if sup_total
-    puts '@listing.pictures_______'+@listing.pictures.size.to_s
     # bring the pics again
     @listing.pictures.destroy_all
-    raw_pictures = raw_listing.search(".product-gallery-container div img")
+    raw_pictures = raw_listing.search(".short-description-gallery-thumb img")
+
     @pictures = []
     raw_pictures.each do |raw_picture|
+      
       picture = Picture.new
       picture.url = raw_picture.attributes['src'].text
+      picture.url.sub! '-I.', '-F.'      
       @listing.pictures << picture unless picture.url.include? '-M.' #remove thumbs images
     end
-    puts 'listing_____________'+@listing.to_json
 
     #Search duplicates
     dupes = Listing.where( title: @listing.title, description: @listing.description).order(:created_at)
-    puts "dupes_____"+dupes.to_json
-    puts "dupes_size____"+dupes.size.to_s
-    puts "dupes_count____"+dupes.count.to_s
     if dupes.size > 1
       dupe = dupes.first
-      puts "dupe_____"+dupe.to_json
       @listing.comment = "" if @listing.comment.nil?
       @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
     end
@@ -121,7 +117,6 @@ class ListingsController < ApplicationController
   def scrapeit_gallito
     agent = Mechanize.new
     page = agent.get(@listing.link)
-    dolar_to_pesos = 26.5
 
     raw_listing = agent.page.search(".contendor")
 

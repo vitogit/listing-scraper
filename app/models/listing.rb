@@ -14,21 +14,21 @@ class Listing < ActiveRecord::Base
   def self.scrape_ml
     @listings = []
     max_pages = 20
-    dolar_to_pesos = 26.5
-    max_price = 17000
-    #barrios punta carretas, pocitos, pocitos-nuevo
-    urls = ['http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/punta-carretas-montevideo/_PriceRange_0-17000_Ambientes_2',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-montevideo/_PriceRange_0-17000_Ambientes_2',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-nuevo-montevideo/_PriceRange_0-17000_Ambientes_2',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/villa-biarritz-montevideo/_PriceRange_0-17000_Ambientes_2',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/punta-carretas-montevideo/_PriceRange_0-17000_Ambientes_3',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-montevideo/_PriceRange_0-17000_Ambientes_3',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-nuevo-montevideo/_PriceRange_0-17000_Ambientes_3',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/villa-biarritz-montevideo/_PriceRange_0-17000_Ambientes_3',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/punta-carretas-montevideo/_PriceRange_0-17000_Ambientes_4',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-montevideo/_PriceRange_0-17000_Ambientes_4',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/pocitos-nuevo-montevideo/_PriceRange_0-17000_Ambientes_4',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/villa-biarritz-montevideo/_PriceRange_0-17000_Ambientes_4'
+    dolar_to_pesos = 28.5
+    max_price = 18000
+    urls = ['http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/pocitos/_PriceRange_0-18000_Ambientes_3',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/cordon/_PriceRange_0-18000_Ambientes_3',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/parque-batlle/_PriceRange_0-18000_Ambientes_3',                        
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/parque-rodo/_PriceRange_0-18000_Ambientes_3',                        
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/pocitos-nuevo/_PriceRange_0-18000_Ambientes_3',                        
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/tres-cruces/_PriceRange_0-18000_Ambientes_3',                        
+
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/pocitos/_PriceRange_0-18000_Ambientes_4',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/cordon/_PriceRange_0-18000_Ambientes_4',
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/parque-batlle/_PriceRange_0-18000_Ambientes_4',                        
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/parque-rodo/_PriceRange_0-18000_Ambientes_4',                        
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/pocitos-nuevo/_PriceRange_0-18000_Ambientes_4',                        
+            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/tres-cruces/_PriceRange_0-18000_Ambientes_4', 
             ]
 
     old_count = Listing.count
@@ -38,7 +38,7 @@ class Listing < ActiveRecord::Base
 
       begin
         page = agent.get(url)
-        raw_listings = page.search(".article")
+        raw_listings = page.search(".item-realestate-inner .item-content")
       rescue Exception => e
         raw_listings = []
       end
@@ -52,9 +52,9 @@ class Listing < ActiveRecord::Base
         listing.external_id = listing.link.split('-')[1]
         old_listing = Listing.find_by_external_id(listing.external_id)
 
-        listing.title = raw_listing.at('a').text
+        listing.title = raw_listing.at('.item-title').text
         listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
-        listing.price = raw_listing.at('.ch-price').text[0..-3].gsub(/\D/, '')
+        listing.price = raw_listing.at('.ch-price').text[0..-1].gsub(/\D/, '')
         next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
         next if listing.price > max_price
 
