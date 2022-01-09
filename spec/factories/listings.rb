@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :listing do
     title { Faker::Lorem.characters(15) }
     img { Faker::Lorem.characters(15) }

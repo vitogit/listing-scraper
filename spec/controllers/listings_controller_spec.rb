@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ListingsController, type: :controller do
   before :each do
-    @listing = FactoryGirl.create(:listing)
+    @listing = FactoryBot.create(:listing)
   end
 
   describe 'GET index' do
@@ -19,7 +19,7 @@ RSpec.describe ListingsController, type: :controller do
 
   describe 'GET edit', :vcr do
     it 'should assign @listing' do
-      listing = FactoryGirl.create(:listing)
+      listing = FactoryBot.create(:listing)
        VCR.use_cassette 'edit_listing' do
           get :edit, id: listing.id
           expect(assigns(:listing)).to eq(listing)
@@ -27,7 +27,7 @@ RSpec.describe ListingsController, type: :controller do
     end
 
     it 'renders the :edit view' do
-      listing = FactoryGirl.create(:listing)
+      listing = FactoryBot.create(:listing)
        VCR.use_cassette 'edit_listing' do
         get :edit, id: listing.id
         expect(response).to render_template('edit')
@@ -38,13 +38,13 @@ RSpec.describe ListingsController, type: :controller do
 
   describe 'DELETE destroy' do
     it 'deletes the listing' do
-      listing = FactoryGirl.create(:listing)
+      listing = FactoryBot.create(:listing)
       delete :destroy, id: listing.id 
       expect(listing.deleted).to be_falsey
     end
 
     it 'redirects to the listings' do
-      listing = FactoryGirl.create(:listing)
+      listing = FactoryBot.create(:listing)
       delete :destroy, id: listing.id
       expect(response).to redirect_to(listings_url)
     end
