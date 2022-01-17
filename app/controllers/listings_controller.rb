@@ -71,29 +71,26 @@ class ListingsController < ApplicationController
     agent = Mechanize.new
     page = agent.get(@listing.link)
 
-    raw_listing = agent.page.search(".nav-main-content")
+    raw_listing = agent.page.search(".ui-vip-core")
 
-    @listing.title = raw_listing.at('.vip-product-info__development__name').text
-    @listing.description = raw_listing.search('.preformated-text').map(&:text).join(' ')
+    @listing.title = raw_listing.at('.ui-pdp-title').text
+    @listing.description = raw_listing.search('.ui-pdp-description__content').map(&:text).join(' ')
     @listing.full_scraped = true
 
-    sup_total = raw_listing.at(".attribute-group span:contains('Superficie construida')").next_element.text if raw_listing.at(".attribute-group  span:contains('Superficie construida')")
-    gc = raw_listing.at(".attribute-group span:contains('Expensas')").next_element.text if raw_listing.at(".attribute-group span:contains('Expensas')")
-    @listing.gc = gc.gsub(/\D/, '') if gc.present?
-
+    sup_total = raw_listing.at("th:contains('Superficie total')").next_element.text if raw_listing.at("th:contains('Superficie total')")
+    dormitorios = raw_listing.at("th:contains('Dormitorios')").next_element.text if raw_listing.at("th:contains('Dormitorios')")
 
     @listing.description = @listing.description+". "+sup_total if sup_total
     # bring the pics again
     @listing.pictures.destroy_all
-    raw_pictures = raw_listing.search(".short-description-gallery-thumb img")
+    raw_pictures = raw_listing.search(".ui-pdp-gallery img")
 
     @pictures = []
     raw_pictures.each do |raw_picture|
-      
+
       picture = Picture.new
-      picture.url = raw_picture.attributes['src'].text
-      picture.url.sub! '-I.', '-F.'      
-      @listing.pictures << picture unless picture.url.include? '-M.' #remove thumbs images
+      picture.url = raw_picture.attributes['data-src'].text
+      @listing.pictures << picture unless picture.url.include? 'data:image' #remove thumbs images
     end
 
     #Search duplicates
@@ -118,27 +115,24 @@ class ListingsController < ApplicationController
     agent = Mechanize.new
     page = agent.get(@listing.link)
 
-    raw_listing = agent.page.at(".contendor")
+    raw_listing = agent.page.at("main.container")
 
     @listing.title = raw_listing.at('.titulo').text
-    @listing.description = raw_listing.at('#descripcionLarga').text.squish
+    @listing.description = raw_listing.at('#descripcionCollapse').text.squish
     @listing.full_scraped = true
 
-    sup_total = raw_listing.at("#primerosLi li:contains('Sup. Total:')").text if raw_listing.at("#primerosLi li:contains('Sup. Total:')")
-    gc = raw_listing.at("#UlGenerales li:contains('Gastos Comunes:')").text if raw_listing.at("#UlGenerales li:contains('Gastos Comunes:')")
-    @listing.gc = gc.gsub(/\D/, '') if gc.present?
-
+    sup_total = raw_listing.at(".list-group-item:contains('Sup. construida:')").text.gsub('Sup. construida: ', '') if raw_listing.at(".list-group-item:contains('Sup. construida:')")
 
     @listing.description = @listing.description+". "+sup_total if sup_total
 
     # save pictures only if there are empty
     @listing.pictures.destroy_all
-    raw_pictures = raw_listing.search("#gal1 a")
+    raw_pictures = raw_listing.search(".carousel-item img")
     @pictures = []
     raw_pictures.each do |raw_picture|
       picture = Picture.new
-      picture.url = raw_picture.attributes['data-image'].text
-      @listing.pictures << picture unless picture.url.include? '58x44'
+      picture.url = raw_picture['src']
+      @listing.pictures << picture
     end
   end
 

@@ -11,24 +11,19 @@ class Listing < ActiveRecord::Base
     id.to_s + " - " + title.to_s + " - " + price.to_s
   end
 
+
   def self.scrape_ml
     @listings = []
     max_pages = 20
-    dolar_to_pesos = 28.5
-    max_price = 18000
-    urls = ['http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/pocitos/_PriceRange_0-18000_Ambientes_3',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/cordon/_PriceRange_0-18000_Ambientes_3',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/parque-batlle/_PriceRange_0-18000_Ambientes_3',                        
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/parque-rodo/_PriceRange_0-18000_Ambientes_3',                        
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/pocitos-nuevo/_PriceRange_0-18000_Ambientes_3',                        
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/tres-cruces/_PriceRange_0-18000_Ambientes_3',                        
-
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/pocitos/_PriceRange_0-18000_Ambientes_4',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/cordon/_PriceRange_0-18000_Ambientes_4',
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/parque-batlle/_PriceRange_0-18000_Ambientes_4',                        
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/parque-rodo/_PriceRange_0-18000_Ambientes_4',                        
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/pocitos-nuevo/_PriceRange_0-18000_Ambientes_4',                        
-            'http://inmuebles.mercadolibre.com.uy/apartamentos/alquiler/montevideo/tres-cruces/_PriceRange_0-18000_Ambientes_4', 
+    dolar_to_pesos = 43
+    max_price = 300000
+    urls = ['https://listado.mercadolibre.com.uy/inmuebles/casas/venta/mas-de-3-dormitorios/montevideo/buceo/_PriceRange_100000USD-300000USD_HAS*GARDEN_242085_NoIndex_True_PARKING*LOTS_1-*#applied_filter_id%3Dcity%26applied_filter_name%3DCiudades%26applied_filter_order%3D3%26applied_value_id%3DTUxVQ0JVQzNlMDdl%26applied_value_name%3DBuceo%26applied_value_order%3D9%26applied_value_results%3D34%26is_custom%3Dfalse%26view_more_flag%3Dtrue',
+            'https://listado.mercadolibre.com.uy/inmuebles/casas/venta/mas-de-3-dormitorios/montevideo/malvin/_PriceRange_100000USD-300000USD_HAS*GARDEN_242085_NoIndex_True_PARKING*LOTS_1-*#applied_filter_id%3Dcity%26applied_filter_name%3DCiudades%26applied_filter_order%3D3%26applied_value_id%3DTUxVQ0JVQzNlMDdl%26applied_value_name%3DBuceo%26applied_value_order%3D9%26applied_value_results%3D34%26is_custom%3Dfalse%26view_more_flag%3Dtrue',
+            'https://listado.mercadolibre.com.uy/inmuebles/casas/venta/mas-de-3-dormitorios/montevideo/carrasco/_PriceRange_100000USD-300000USD_HAS*GARDEN_242085_NoIndex_True_PARKING*LOTS_1-*#applied_filter_id%3Dcity%26applied_filter_name%3DCiudades%26applied_filter_order%3D3%26applied_value_id%3DTUxVQ0JVQzNlMDdl%26applied_value_name%3DBuceo%26applied_value_order%3D9%26applied_value_results%3D34%26is_custom%3Dfalse%26view_more_flag%3Dtrue',
+            'https://listado.mercadolibre.com.uy/inmuebles/casas/venta/mas-de-3-dormitorios/montevideo/punta-gorda/_PriceRange_100000USD-300000USD_HAS*GARDEN_242085_NoIndex_True_PARKING*LOTS_1-*#applied_filter_id%3Dcity%26applied_filter_name%3DCiudades%26applied_filter_order%3D3%26applied_value_id%3DTUxVQ0JVQzNlMDdl%26applied_value_name%3DBuceo%26applied_value_order%3D9%26applied_value_results%3D34%26is_custom%3Dfalse%26view_more_flag%3Dtrue',
+            'https://listado.mercadolibre.com.uy/inmuebles/casas/venta/mas-de-3-dormitorios/montevideo/pocitos-nuevo/_PriceRange_100000USD-300000USD_HAS*GARDEN_242085_NoIndex_True_PARKING*LOTS_1-*#applied_filter_id%3Dcity%26applied_filter_name%3DCiudades%26applied_filter_order%3D3%26applied_value_id%3DTUxVQ0JVQzNlMDdl%26applied_value_name%3DBuceo%26applied_value_order%3D9%26applied_value_results%3D34%26is_custom%3Dfalse%26view_more_flag%3Dtrue',
+            'https://listado.mercadolibre.com.uy/inmuebles/casas/venta/mas-de-3-dormitorios/montevideo/pocitos/_PriceRange_100000USD-300000USD_HAS*GARDEN_242085_NoIndex_True_PARKING*LOTS_1-*#applied_filter_id%3Dcity%26applied_filter_name%3DCiudades%26applied_filter_order%3D3%26applied_value_id%3DTUxVQ0JVQzNlMDdl%26applied_value_name%3DBuceo%26applied_value_order%3D9%26applied_value_results%3D34%26is_custom%3Dfalse%26view_more_flag%3Dtrue',
+            'https://listado.mercadolibre.com.uy/inmuebles/casas/venta/mas-de-3-dormitorios/montevideo/punta-carretas/_PriceRange_100000USD-300000USD_HAS*GARDEN_242085_NoIndex_True_PARKING*LOTS_1-*#applied_filter_id%3Dcity%26applied_filter_name%3DCiudades%26applied_filter_order%3D3%26applied_value_id%3DTUxVQ0JVQzNlMDdl%26applied_value_name%3DBuceo%26applied_value_order%3D9%26applied_value_results%3D34%26is_custom%3Dfalse%26view_more_flag%3Dtrue',
             ]
 
     old_count = Listing.count
@@ -38,42 +33,45 @@ class Listing < ActiveRecord::Base
 
       begin
         page = agent.get(url)
-        raw_listings = page.search(".item-realestate-inner .item-content")
+        raw_listings = page.search(".ui-search-results .ui-search-result")
       rescue Exception => e
         raw_listings = []
       end
+      while  pages < max_pages && page.link_with(text: 'Siguiente')  do
 
-      raw_listings.each do |raw_listing|
-        listing = Listing.new
-        listing.from = "ml"
-        listing.similar = []
+        raw_listings.each do |raw_listing|
+          listing = Listing.new
+          listing.from = "ml"
+          listing.similar = []
 
-        listing.link = raw_listing.at('a').attributes['href']
-        listing.external_id = listing.link.split('-')[1]
-        old_listing = Listing.find_by_external_id(listing.external_id)
+          listing.link = raw_listing.at('a').attributes['href']
+          listing.external_id = listing.link.split('-')[1]
+          old_listing = Listing.find_by_external_id(listing.external_id)
 
-        listing.title = raw_listing.at('.item-title').text
-        listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
-        listing.price = raw_listing.at('.ch-price').text[0..-1].gsub(/\D/, '')
-        next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
-        next if listing.price > max_price
+          listing.title = raw_listing.at('.ui-search-item__title').text
+          # listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
+          listing.img = raw_listing.at('.ui-search-result-image__element')['data-src']
+          listing.price = raw_listing.at('.price-tag-fraction').text..gsub('.','')
+          next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
+          next if listing.price > max_price
 
-        if listing.price <= max_price
-          # price change, add comment with the old price
-          if old_listing.nil?
-            listing.save #new listing
-          else
-            if old_listing.price.present? && old_listing.price != listing.price
-              old_listing.comment = "" if old_listing.comment.nil?
-              old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
-              old_listing.price = listing.price
-              old_listing.save
-            end
-            if old_listing.img.present? && old_listing.img != listing.img
-              old_listing.comment = "" if old_listing.comment.nil?
-              old_listing.comment += " CAMBIO IMAGEN antigua:"+old_listing.img.to_s
-              old_listing.img = listing.img
-              old_listing.save
+          if listing.price <= max_price
+            # price change, add comment with the old price
+            if old_listing.nil?
+              listing.save #new listing
+            else
+              if old_listing.price.present? && old_listing.price != listing.price
+                old_listing.comment = "" if old_listing.comment.nil?
+                old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
+                old_listing.price = listing.price
+                old_listing.save
+              end
+              if old_listing.img.present? && old_listing.img != listing.img
+                old_listing.comment = "" if old_listing.comment.nil?
+                old_listing.comment += " CAMBIO IMAGEN antigua:"+old_listing.img.to_s
+                old_listing.img = listing.img
+                old_listing.save
+              end
             end
           end
         end
@@ -84,17 +82,17 @@ class Listing < ActiveRecord::Base
   def self.scrape_gallito
     agent = Mechanize.new
     @listings = []
-    page = agent.get('http://www.gallito.com.uy/inmuebles/apartamentos/alquiler/montevideo/cordon!parque-batlle!parque-rodo!pocitos!pocitos-nuevo!tres-cruces/2-dormitorios/pre-0-18000-pesos')
+    page = agent.get('https://www.gallito.com.uy/inmuebles/casas/venta/montevideo/buceo!carrasco!malvin!pocitos!pocitos-nuevo!punta-carretas!punta-gorda!villa-dolores/pre-100000-320000-dolares/con-garages/3-dormitorios/4-dormitorios/5-dormitorios-o-mas')
     pages = 0
     max_pages = 20
-    dolar_to_pesos = 28.5
-    max_price = 18000
+    dolar_to_pesos = 43
+    max_price = 300000
 
     # add /ord_rec to sort by recent
     # raw_listings = agent.page.search("#grillaavisos a")
     # return if Listing.find_by_link(raw_listings.first.attributes['href'].to_s).present?
 
-    while  pages < max_pages && page.link_with(text: /Siguiente/)  do
+    while  pages < max_pages && page.link_with(text: '>')  do
       raw_listings = agent.page.search("#grillaavisos article")
       raw_listings.each do |raw_listing|
 
@@ -143,7 +141,7 @@ class Listing < ActiveRecord::Base
           end
         end
       end
-      next_page = page.link_with(text: /Siguiente/)
+      next_page = page.link_with(text: '>')
       page = next_page.click
       pages += 1
     end

@@ -1,10 +1,3 @@
-
-  //
-  // $('.ckeditor').ckeditor({
-  // });
-
-
-
 $(document).on('page:change', function () {
     var table = $('.datatable').DataTable({
       "order": [[ 8, "desc" ]],
