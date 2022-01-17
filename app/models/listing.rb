@@ -37,41 +37,39 @@ class Listing < ActiveRecord::Base
       rescue Exception => e
         raw_listings = []
       end
-      while  pages < max_pages && page.link_with(text: 'Siguiente')  do
 
-        raw_listings.each do |raw_listing|
-          listing = Listing.new
-          listing.from = "ml"
-          listing.similar = []
+      raw_listings.each do |raw_listing|
+        listing = Listing.new
+        listing.from = "ml"
+        listing.similar = []
 
-          listing.link = raw_listing.at('a').attributes['href']
-          listing.external_id = listing.link.split('-')[1]
-          old_listing = Listing.find_by_external_id(listing.external_id)
+        listing.link = raw_listing.at('a').attributes['href']
+        listing.external_id = listing.link.split('-')[1]
+        old_listing = Listing.find_by_external_id(listing.external_id)
 
-          listing.title = raw_listing.at('.ui-search-item__title').text
-          # listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
-          listing.img = raw_listing.at('.ui-search-result-image__element')['data-src']
-          listing.price = raw_listing.at('.price-tag-fraction').text..gsub('.','')
-          next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
-          next if listing.price > max_price
+        listing.title = raw_listing.at('.ui-search-item__title').text
+        # listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
+        listing.img = raw_listing.at('.ui-search-result-image__element')['data-src']
+        listing.price = raw_listing.at('.price-tag-fraction').text.gsub('.','')
+        next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
+        next if listing.price > max_price
 
-          if listing.price <= max_price
-            # price change, add comment with the old price
-            if old_listing.nil?
-              listing.save #new listing
-            else
-              if old_listing.price.present? && old_listing.price != listing.price
-                old_listing.comment = "" if old_listing.comment.nil?
-                old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
-                old_listing.price = listing.price
-                old_listing.save
-              end
-              if old_listing.img.present? && old_listing.img != listing.img
-                old_listing.comment = "" if old_listing.comment.nil?
-                old_listing.comment += " CAMBIO IMAGEN antigua:"+old_listing.img.to_s
-                old_listing.img = listing.img
-                old_listing.save
-              end
+        if listing.price <= max_price
+          # price change, add comment with the old price
+          if old_listing.nil?
+            listing.save #new listing
+          else
+            if old_listing.price.present? && old_listing.price != listing.price
+              old_listing.comment = "" if old_listing.comment.nil?
+              old_listing.comment += " CAMBIO PRECIO antiguo:"+old_listing.price.to_s
+              old_listing.price = listing.price
+              old_listing.save
+            end
+            if old_listing.img.present? && old_listing.img != listing.img
+              old_listing.comment = "" if old_listing.comment.nil?
+              old_listing.comment += " CAMBIO IMAGEN antigua:"+old_listing.img.to_s
+              old_listing.img = listing.img
+              old_listing.save
             end
           end
         end
@@ -91,7 +89,6 @@ class Listing < ActiveRecord::Base
     # add /ord_rec to sort by recent
     # raw_listings = agent.page.search("#grillaavisos a")
     # return if Listing.find_by_link(raw_listings.first.attributes['href'].to_s).present?
-
     while  pages < max_pages && page.link_with(text: '>')  do
       raw_listings = agent.page.search("#grillaavisos article")
       raw_listings.each do |raw_listing|
@@ -112,9 +109,9 @@ class Listing < ActiveRecord::Base
 
         listing.currency = price_selector.text.gsub(/[\d^.]/, '') if price_selector
         if listing.currency.strip == "U$S"
-          listing.price = listing.price * dolar_to_pesos
-          listing.currency = "(c)"
+          listing.currency = "(U$S)"
         else
+          listing.price = listing.price / dolar_to_pesos
           listing.currency = ""
         end
 

@@ -24,6 +24,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'vcr'
   gem "pry-rails"
+  gem 'byebug'
 end
 
 

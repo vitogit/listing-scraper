@@ -87,9 +87,9 @@ class ListingsController < ApplicationController
 
     @pictures = []
     raw_pictures.each do |raw_picture|
-
       picture = Picture.new
-      picture.url = raw_picture.attributes['data-src'].text
+      picture.url = raw_picture['data-src']
+      next if picture.url.nil?
       @listing.pictures << picture unless picture.url.include? 'data:image' #remove thumbs images
     end
 
