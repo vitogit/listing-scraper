@@ -1,9 +1,4 @@
 <div class="page-header">
-  <h1>ScraperMagic</h1> <br>
-  <!-- <%= link_to new_listing_path, class: 'btn btn-primary new-listing' do %>
-    <span class="glyphicon glyphicon-plus"></span>
-    New Listing
-  <% end %> -->
   <%= link_to 'Show deleted and without pics', {controller: "listings", action: "index", show_deleted: true}, class: 'btn btn-primary new-listing', method: :get if !@show_deleted %>
   <%= link_to 'Hide deleted and without pics', :root, class: 'btn btn-primary new-listing', method: :get  if @show_deleted  %>
 
@@ -21,16 +16,11 @@
         <th></th>
         <th>Title</th>
         <th>Price</th>
-        <th>Gc</th>
-        <th>Total</th>
         <th>Description</th>
         <th>Comment</th>
-        <!-- <th>Phone</th> -->
         <th>Ranking</th>
-        <th>Created</th>
-        <th>Updated</th>
+        <th>Modified</th>
         <th>Action</th>
-
       </tr>
     </thead>
 
@@ -43,18 +33,14 @@
             </td>
             <td> <div style="width:150px;height:150px;overflow:hidden"><%="#{listing.title} -- #{listing.from} " %> </div></td>
             <td> <%= listing.price %> <%= listing.currency %></td>
-            <td><%= listing.gc %> <%= listing.guarantee %></td>
-            <td><%= (listing.price.to_i+listing.gc.to_i) if listing.price && listing.gc%></td>
             <td> <div style="width:190px;height:150px;overflow:hidden"> <%= listing.description %> </div> </td>
             <td> <div style="width:190px;height:150px;overflow:hidden"> <%= listing.comment %> </div> </td>
             <td  class="ranking_<%= listing.ranking %>"> <%=listing.ranking  %></td>
-            <td> <%=listing.created_at.in_time_zone.strftime("%Y/%m/%e %H:%M:%S")  %></td>
-            <td> <%=listing.updated_at.in_time_zone.strftime("%Y/%m/%e %H:%M:%S")  %></td>
+            <td> Created: <%=listing.created_at.in_time_zone.strftime("%Y/%m/%e")  %> <br>  Updated: <%=listing.updated_at.in_time_zone.strftime("%Y/%m/%e")  %> </td>
             <td><%= link_to :ver, listing.link %> <br><br>
                 <%= link_to :borrar, listing, method: :delete, data: { confirm: 'Are you sure?' }, remote:true if !listing.deleted %>
                 <%= 'Borrado' if listing.deleted %>
             </td>
-
       <% end %>
     </tbody>
   </table>
