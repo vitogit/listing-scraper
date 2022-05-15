@@ -16,6 +16,7 @@
         <th></th>
         <th>Title</th>
         <th>Price</th>
+        <th>Direccion</th>
         <th>Description</th>
         <th>Comment</th>
         <th>Ranking</th>
@@ -33,6 +34,7 @@
             </td>
             <td> <div style="width:150px;height:150px;overflow:hidden"><%="#{listing.title} -- #{listing.from} " %> </div></td>
             <td> <%= listing.price %> <%= listing.currency %></td>
+            <td> <%= listing.address %> <%= listing.address %></td>
             <td> <div style="width:190px;height:150px;overflow:hidden"> <%= listing.description %> </div> </td>
             <td> <div style="width:190px;height:150px;overflow:hidden"> <%= listing.comment %> </div> </td>
             <td  class="ranking_<%= listing.ranking %>"> <%=listing.ranking  %></td>

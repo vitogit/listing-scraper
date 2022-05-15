@@ -39,6 +39,7 @@ class Listing < ActiveRecord::Base
       rescue Exception => e
         raw_listings = []
       end
+      # nei = page.search(".ui-search-applied-filters a")[1]&.text
 
       raw_listings.each do |raw_listing|
         listing = Listing.new
@@ -50,6 +51,7 @@ class Listing < ActiveRecord::Base
         old_listing = Listing.find_by_external_id(listing.external_id)
 
         listing.title = raw_listing.at('.ui-search-item__title').text
+        # listing.address = nei
         # listing.img = raw_listing.at('img').attributes['title'] || raw_listing.at('img').attributes['src'] #in the title is the real url, because with js it load it
         listing.img = raw_listing.at('.ui-search-result-image__element')['data-src']
         listing.price = raw_listing.at('.price-tag-fraction').text.gsub('.','')
@@ -105,7 +107,6 @@ class Listing < ActiveRecord::Base
         listing.img = raw_listing.at('.img-seva').attributes['src'].text
         price_selector = raw_listing.at('.contenedor-info strong')
         listing.price = price_selector.text.gsub(/\D/, '') if price_selector
-
         next if old_listing.present? && old_listing.price == listing.price && old_listing.img == listing.img
         next if listing.price > max_price
 
