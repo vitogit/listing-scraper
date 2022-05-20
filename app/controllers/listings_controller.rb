@@ -10,7 +10,7 @@ class ListingsController < ApplicationController
     if @show_deleted_and_no_image
       @listings = Listing.order('created_at desc')
     elsif @hide_ugly
-      @listings = Listing.where(deleted:false).where('ranking >2').where("img not like ?", "%nodisponible%").order('created_at desc')
+      @listings = Listing.where(deleted:false).where('ranking > 2 or ranking is null').where("img not like ?", "%nodisponible%").order('created_at desc')
     else
       @listings = Listing.where(deleted:false).where("img not like ?", "%nodisponible%").order('created_at desc')
     end
@@ -20,7 +20,7 @@ class ListingsController < ApplicationController
     # @duplicates = Listing.all.group_by{|elem| elem[:title]}.delete_if { |k, v| v.size == 1 }
     @duplicates_img = Listing.all.group_by{|elem| elem[:img]}.delete_if { |k, v| v.size == 1 }
     @duplicates = Picture.joins(:listing).select('listing_id AS id',:url,'listings.title AS title').group_by{|elem| elem[:url]}.delete_if { |k, v| v.size == 1 }.merge @duplicates_img
-    @duplicates_title = Listing.order(:title).group_by{|elem| elem[:title]}.delete_if { |k, v| v.size == 1 }
+    @duplicates_title = Listing.order(:title).group_by{|elem| elem[:title].downcase}.delete_if { |k, v| v.size == 1 }
   end
 
   def add_similar
@@ -100,6 +100,7 @@ class ListingsController < ApplicationController
       @listing.comment = "" if @listing.comment.nil?
       @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
     end
+    # TODO: Search duplicate images
   end
 
   def scrapeit
@@ -134,6 +135,16 @@ class ListingsController < ApplicationController
       picture.url = raw_picture['src']
       @listing.pictures << picture
     end
+
+    #Search duplicates
+    dupes = Listing.where( title: @listing.title, description: @listing.description).order(:created_at)
+    if dupes.size > 1
+      dupe = dupes.first
+      @listing.comment = "" if @listing.comment.nil?
+      @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
+    end
+     # TODO: Search duplicate images
+
   end
 
   # GET /listings/1
