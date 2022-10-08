@@ -4,6 +4,9 @@
 
   <%= link_to 'Hide ugly', {controller: "listings", action: "index", hide_ugly: true}, class: 'btn btn-primary new-listing', method: :get if !@hide_ugly %>
   <%= link_to 'Show ugly', :root, class: 'btn btn-primary new-listing', method: :get  if @hide_ugly %>
+
+  <%= link_to 'Hide dupes', {controller: "listings", action: "index", hide_dupes: true}, class: 'btn btn-primary new-listing', method: :get if !@hide_dupes %>
+  <%= link_to 'Show dupes', :root, class: 'btn btn-primary new-listing', method: :get  if @hide_dupes %>
   <span style="float:right">
     Negative Search: <input size="20" type="text" id="negative_search">
   </span>

@@ -6,9 +6,12 @@ class ListingsController < ApplicationController
   def index
     @show_deleted_and_no_image = params[:show_deleted]
     @hide_ugly = params[:hide_ugly]
+    @hide_dupes = params[:hide_dupes] || true
 
     if @show_deleted_and_no_image
       @listings = Listing.order('created_at desc')
+    elsif @hide_dupes
+      @listings = Listing.where(deleted:false).where("img not like ? AND (comment not like ? OR comment is null)", "%nodisponible%", "%Duplicado%").order('created_at desc')
     elsif @hide_ugly
       @listings = Listing.where(deleted:false).where('ranking > 2 or ranking is null').where("img not like ?", "%nodisponible%").order('created_at desc')
     else

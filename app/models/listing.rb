@@ -90,7 +90,7 @@ class Listing < ActiveRecord::Base
   def self.scrape_gallito
     agent = Mechanize.new
     @listings = []
-    page = agent.get('https://www.gallito.com.uy/inmuebles/casas/venta/montevideo/buceo!carrasco!malvin!pocitos!pocitos-nuevo!punta-carretas!punta-gorda/pre-240000-400000-dolares/con-garages/2-dormitorios/3-dormitorios/4-dormitorios/5-dormitorios-o-mas')
+    page = agent.get('https://www.gallito.com.uy/inmuebles/casas/venta/montevideo/buceo!malvin!pocitos!pocitos-nuevo!punta-carretas!punta-gorda/pre-240000-400000-dolares/con-garages/2-dormitorios/3-dormitorios/4-dormitorios/5-dormitorios-o-mas')
     pages = 0
     max_pages = 20
     dolar_to_pesos = 43
