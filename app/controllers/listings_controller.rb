@@ -94,12 +94,12 @@ class ListingsController < ApplicationController
     end
 
     #Search duplicates
-    dupes = Listing.where( title: @listing.title, description: @listing.description).order(:created_at)
-    if dupes.size > 1
-      dupe = dupes.first
-      @listing.comment = "" if @listing.comment.nil?
-      @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
-    end
+    # dupes = Listing.where( title: @listing.title, price: @listing.price).order(:created_at)
+    # if dupes.size > 1
+    #   dupe = dupes.first
+    #   @listing.comment = "" if @listing.comment.nil?
+    #   @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
+    # end
     # TODO: Search duplicate images
   end
 
@@ -137,12 +137,12 @@ class ListingsController < ApplicationController
     end
 
     #Search duplicates
-    dupes = Listing.where( title: @listing.title, description: @listing.description).order(:created_at)
-    if dupes.size > 1
-      dupe = dupes.first
-      @listing.comment = "" if @listing.comment.nil?
-      @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
-    end
+    # dupes = Listing.where( title: @listing.title, price: @listing.price).order(:created_at)
+    # if dupes.size > 1
+    #   dupe = dupes.first
+    #   @listing.comment = "" if @listing.comment.nil?
+    #   @listing.comment = @listing.comment + " Duplicado: "+request.base_url+"/listings/"+dupe.id.to_s+"/edit"
+    # end
      # TODO: Search duplicate images
 
   end

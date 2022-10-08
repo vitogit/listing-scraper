@@ -60,7 +60,14 @@ class Listing < ActiveRecord::Base
         if listing.price <= max_price
           # price change, add comment with the old price
           if old_listing.nil?
+            dupes = Listing.where( title: listing.title, price: listing.price).order(:created_at)
+            if dupes.size >= 1
+              dupe = dupes.first
+              listing.comment = "" if listing.comment.nil?
+              listing.comment = listing.comment + " Duplicado: <a href='http://192.168.1.7:3333/listings/"+dupe.id.to_s+"/edit'>"+dupe.id.to_s+"<a/>"
+            end
             listing.save #new listing
+
           else
             if old_listing.price.present? && old_listing.price != listing.price
               old_listing.comment = "" if old_listing.comment.nil?
@@ -123,6 +130,12 @@ class Listing < ActiveRecord::Base
         if listing.price <= max_price
           # price change, add comment with the old price
           if old_listing.nil?
+            dupes = Listing.where( title: listing.title, price: listing.price).order(:created_at)
+            if dupes.size >= 1
+              dupe = dupes.first
+              listing.comment = "" if listing.comment.nil?
+              listing.comment = listing.comment + " Duplicado: <a href='http://192.168.1.7:3333/listings/"+dupe.id.to_s+"/edit'>"+dupe.id.to_s+"<a/>"
+            end
             listing.save #new listing
           else
             if old_listing.price.present? && old_listing.price != listing.price

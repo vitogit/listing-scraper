@@ -36,7 +36,7 @@
             <td> <%= listing.price %> <%= listing.currency %></td>
             <td> <%= listing.address %> <%= listing.address %></td>
             <td> <div style="width:190px;height:150px;overflow:hidden"> <%= listing.description %> </div> </td>
-            <td> <div style="width:190px;height:150px;overflow:hidden"> <%= listing.comment %> </div> </td>
+            <td> <div style="width:190px;height:150px;overflow:hidden"> <%= raw(listing.comment) %> </div> </td>
             <td  class="ranking_<%= listing.ranking %>"> <%=listing.ranking  %></td>
             <td> Created: <%=listing.created_at.in_time_zone.strftime("%Y/%m/%e")  %> <br>  Updated: <%=listing.updated_at.in_time_zone.strftime("%Y/%m/%e")  %> </td>
             <td><%= link_to :ver, listing.link %> <br><br>
